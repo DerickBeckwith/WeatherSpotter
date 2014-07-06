@@ -5,11 +5,15 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,8 +30,7 @@ public class MainActivity extends Activity implements SensorEventListener{
   TextView mTextPressure = null;
   TextView mTextCompass = null;
   
-  private SensorManager mSensorManager;
-  
+  private SensorManager mSensorManager;  
   private Sensor mPressureSensor;  
   Boolean mPressureSensorExists = false;
   private float mPressureMillibars;
@@ -82,7 +85,9 @@ public class MainActivity extends Activity implements SensorEventListener{
       mTextPressure.setText("No pressure sensor");
     }
       
-
+    Location location = getLocation();
+    if(location != null)
+      setLocation(location);
   }
   
   //Save onClick()
@@ -128,4 +133,64 @@ public class MainActivity extends Activity implements SensorEventListener{
     }
   }
 
+//**************************************************************************** Position
+  private Location getLocation(){
+    Location location = null;
+
+    // Acquire a reference to the system Location Manager
+    final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+    // Define a listener that responds to location updates
+    LocationListener locationListener = new LocationListener() {
+
+      public void onLocationChanged(Location location) {
+        // Called when a new location is found by the network location provider.    
+        locationManager.removeUpdates(this);  
+      }
+  
+      // We must define these to implement the interface, 
+      // but we don't do anything when they're triggered.
+      public void onStatusChanged(String provider, int status, Bundle extras) {    
+      }
+    
+      public void onProviderEnabled(String provider) {    
+      }
+    
+      public void onProviderDisabled(String provider) {    
+      }
+    };
+
+    // Register the listener with the Location Manager to receive location updates
+    if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+      Log.d(TAG, "locationManager.isProviderEnabled = true/gps");    
+      locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+      location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+      if (location != null) {
+        return location;    
+      } else {    
+        Toast.makeText(getApplicationContext(),"GPS has yet to calculate location.", Toast.LENGTH_LONG).show();
+      }
+    } else {
+        Toast.makeText(getApplicationContext(), "GPS is not enabled.", Toast.LENGTH_LONG).show();    
+    }
+    return location;
+  }
+
+
+  private void setLocation(Location location) {
+    Log.d(TAG, "Location =" + location);
+    double latitude = location.getLatitude();
+    double longitude = location.getLongitude();
+
+    // TODO: Set the text of the UI controls 
+    // to latitude and longitude.
+    mTextLat.setText(Double.toString(latitude));
+    mTextLong.setText(Double.toString(longitude));
+    Log.d(TAG, "Latitude = " + latitude);
+    Log.d(TAG, "Longitude = " + longitude);
+
+  }
+  
 }
