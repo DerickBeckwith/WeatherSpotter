@@ -43,12 +43,19 @@ public class MainActivity extends Activity implements SensorEventListener{
   TextView mTextPressure = null;
   TextView mTextCompass = null;
   ListView mListViewFileData = null;
- 
+   
   ArrayAdapter<String> mAdapter;
   private SensorManager mSensorManager;  
   private Sensor mPressureSensor;  
-  Boolean mPressureSensorExists = false;
+  private Sensor mCompassSensor;
+  private Boolean mPressureSensorExists = false;
+  private Boolean mCompassSensorExists = false;
   private float mPressureMillibars;
+  private float mAzimuth;
+  private String mDate;
+  private String mTime;
+  private Double mLatitude;
+  private Double mLongitude;
   
   //********************************************************************** Activity Lifecycle Methods
   @Override
@@ -69,10 +76,15 @@ public class MainActivity extends Activity implements SensorEventListener{
     //verify existence of humidity sensor
     PackageManager packageManager = this.getPackageManager();
     mPressureSensorExists = packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_BAROMETER);
+    mCompassSensorExists = packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_COMPASS);
     
     //setup sensor manager
     mSensorManager = (SensorManager) getSystemService(this.SENSOR_SERVICE);
     mPressureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
+    mCompassSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+   
+    showData(findViewById(R.id.textHeader));
+    updateData(findViewById(R.id.textHeader));
   }
   
   @Override
@@ -80,6 +92,7 @@ public class MainActivity extends Activity implements SensorEventListener{
     // Register a listener for the sensor.
     super.onResume();
     mSensorManager.registerListener(this, mPressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    mSensorManager.registerListener(this, mCompassSensor, SensorManager.SENSOR_DELAY_NORMAL);
   }
 
   @Override
@@ -91,31 +104,43 @@ public class MainActivity extends Activity implements SensorEventListener{
   
   //********************************************************************** onClick()
   //Update onClick()
-  //************************
+  //************************  
   public void updateData(View view){
-    mTextDate.setText(getDate());
-    mTextTime.setText(getTime());
+    mDate = getDate();
+    mTime = getTime();
+    mTextDate.setText("Date: " + getDate());
+    mTextTime.setText("Time: " + getTime());
     
     if(mPressureSensorExists){
-      mTextPressure.setText(Float.toString(mPressureMillibars));
+      mTextPressure.setText("Pressure: " + Float.toString(mPressureMillibars) + " mb");
     }else{
       mTextPressure.setText("No pressure sensor");
     }
       
     Location location = getLocation();
     if(location != null){
-      setLocation(location);
+      //setLocation(location);
+      double latitude = location.getLatitude();
+      double longitude = location.getLongitude();
+      mLatitude = latitude;
+      mLongitude = longitude;
+      
+      mTextLat.setText("Latitude: " + Double.toString(latitude));
+      mTextLong.setText("Longitude: " + Double.toString(longitude));      
     }else{
       mTextLat.setText("Latitude unavailable");
       mTextLong.setText("Latitude unavailable");
     }
     
-    mTextCompass.setText("No compass");
+    if(mCompassSensorExists){
+      mTextCompass.setText("Azimuth: " + Float.toString(mAzimuth));
+    }else{
+      mTextCompass.setText("No compass");
+    }
     
     //write to log cat
-    String dataString = mTextDate.getText() + "\t" + mTextTime.getText() + "\t" +
-        mTextLat.getText() + "\t" + mTextLong.getText() + mTextPressure.getText() + "\t" +
-        mTextCompass.getText();    
+    String dataString = mDate + "\t" + mTime + "\t" + mLatitude + "\t" + mLongitude + "\t" +
+        Float.toString(mPressureMillibars) + "\t" + Float.toString(mAzimuth);       
     Log.d(TAG,dataString);    
   }
   
@@ -123,10 +148,10 @@ public class MainActivity extends Activity implements SensorEventListener{
   //************************
   @SuppressWarnings("deprecation")
   public void saveData(View view){
-    String dataString = mTextDate.getText() + "\t" + mTextTime.getText() + "\t" +
-        mTextLat.getText() + "\t" + mTextLong.getText() + mTextPressure.getText() + "\t" +
-        mTextCompass.getText() + "\n";
 
+    String dataString = mDate + "\t" + mTime + "\t" + mLatitude + "\t" + mLongitude + "\t" +
+        Float.toString(mPressureMillibars) + "\t" + Float.toString(mAzimuth) + "\n";   
+    
         try{
           OutputStreamWriter osw = new OutputStreamWriter(openFileOutput(FILENAME, Context.MODE_APPEND));
           osw.write(dataString);
@@ -138,7 +163,7 @@ public class MainActivity extends Activity implements SensorEventListener{
         }    
   }
   
-  //ShowAll onClick()
+  //ShowAll onClick() - Button removed
   //************************
   public void showData(View view){
     try{
@@ -159,11 +184,6 @@ public class MainActivity extends Activity implements SensorEventListener{
         String[] values = items.toArray(new String[items.size()]);        
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
         mListViewFileData.setAdapter(mAdapter);
-      }else{
-//        String[] values = null;
-//        mAdapter.clear();
-//        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
-//        mListViewFileData.setAdapter(mAdapter);
       }
     } catch (FileNotFoundException e) {
       Log.e(TAG, "File not found: " + e.toString());
@@ -182,24 +202,13 @@ public class MainActivity extends Activity implements SensorEventListener{
     Log.d(TAG,"File: " + file.toString());
     Log.d(TAG, Boolean.toString(deleted));
     
+    //clears adapter and list view
     List<String> items = new LinkedList<String>();    
     String[] values = items.toArray(new String[items.size()]);    
-    //mAdapter.clear();
     mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
     mListViewFileData.setAdapter(mAdapter);
     
-   // mListViewFileData
- //   mAdapter.clear();
-//  mListViewFileData.setAdapter(mAdapter);
-    
-//    File file = new File(FILENAME);
-//    if (file.exists()){
-//      this.deleteFile(FILENAME);  
-//      mAdapter.clear();
-//      mListViewFileData.setAdapter(mAdapter);
-//    }  
-//    //mListViewFileData.
-//    Toast.makeText(getApplicationContext(), "File deleted", Toast.LENGTH_SHORT).show();
+
   }  
   
   //*********************************************************************** Date and Time Getters
@@ -231,7 +240,17 @@ public class MainActivity extends Activity implements SensorEventListener{
     Sensor sensor = event.sensor;
 
     if (sensor.getType() == Sensor.TYPE_PRESSURE){
-      mPressureMillibars = event.values[0];
+      if (mPressureSensorExists)
+        mPressureMillibars = event.values[0];
+      else
+        mPressureMillibars = 0;
+    }
+    
+    if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
+      if (mCompassSensorExists)
+        mAzimuth = Math.round(event.values[0]);
+      else
+        mAzimuth = 0;
     }
   }
 
@@ -280,13 +299,13 @@ public class MainActivity extends Activity implements SensorEventListener{
     return location;
   }
 
-  private void setLocation(Location location) {
-
-    double latitude = location.getLatitude();
-    double longitude = location.getLongitude();
-    mTextLat.setText(Double.toString(latitude));
-    mTextLong.setText(Double.toString(longitude));
-  }
+//  private void setLocation(Location location) {
+//
+//    double latitude = location.getLatitude();
+//    double longitude = location.getLongitude();
+//    mTextLat.setText(Double.toString(latitude));
+//    mTextLong.setText(Double.toString(longitude));
+//  }
   
 
 }
