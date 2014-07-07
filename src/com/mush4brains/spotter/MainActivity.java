@@ -1,7 +1,16 @@
 package com.mush4brains.spotter;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -17,19 +26,25 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements SensorEventListener{
   public static String TAG = "MainActivity";
+  public static String FILENAME = "SpotterLog.txt";
   
+  TextView mTextHeader = null;
   TextView mTextDate = null;
   TextView mTextTime = null;
   TextView mTextLat = null;
   TextView mTextLong = null;
   TextView mTextPressure = null;
   TextView mTextCompass = null;
-  
+  ListView mListViewFileData = null;
+ 
+  ArrayAdapter<String> mAdapter;
   private SensorManager mSensorManager;  
   private Sensor mPressureSensor;  
   Boolean mPressureSensorExists = false;
@@ -41,13 +56,15 @@ public class MainActivity extends Activity implements SensorEventListener{
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     
-    //assign all text views
+    //assign all views
+    mTextHeader = (TextView)findViewById(R.id.textHeader);
     mTextDate = (TextView)findViewById(R.id.textViewDate);
     mTextTime = (TextView)findViewById(R.id.textViewTime);
     mTextLat = (TextView)findViewById(R.id.textViewLatitude);
     mTextLong = (TextView)findViewById(R.id.textViewLongitude);
     mTextPressure = (TextView)findViewById(R.id.textViewPressure);
     mTextCompass = (TextView)findViewById(R.id.textViewCompass);
+    mListViewFileData = (ListView)findViewById(R.id.listViewFile);
     
     //verify existence of humidity sensor
     PackageManager packageManager = this.getPackageManager();
@@ -70,11 +87,11 @@ public class MainActivity extends Activity implements SensorEventListener{
     // Be sure to unregister the sensor when the activity pauses.
     super.onPause();
     mSensorManager.unregisterListener(this);
-  }  
-  
+  }    
   
   //********************************************************************** onClick()
   //Update onClick()
+  //************************
   public void updateData(View view){
     mTextDate.setText(getDate());
     mTextTime.setText(getTime());
@@ -86,19 +103,104 @@ public class MainActivity extends Activity implements SensorEventListener{
     }
       
     Location location = getLocation();
-    if(location != null)
+    if(location != null){
       setLocation(location);
+    }else{
+      mTextLat.setText("Latitude unavailable");
+      mTextLong.setText("Latitude unavailable");
+    }
+    
+    mTextCompass.setText("No compass");
+    
+    //write to log cat
+    String dataString = mTextDate.getText() + "\t" + mTextTime.getText() + "\t" +
+        mTextLat.getText() + "\t" + mTextLong.getText() + mTextPressure.getText() + "\t" +
+        mTextCompass.getText();    
+    Log.d(TAG,dataString);    
   }
   
   //Save onClick()
+  //************************
+  @SuppressWarnings("deprecation")
   public void saveData(View view){
-    Toast.makeText(getApplicationContext(), "Saved",Toast.LENGTH_SHORT).show();
+    String dataString = mTextDate.getText() + "\t" + mTextTime.getText() + "\t" +
+        mTextLat.getText() + "\t" + mTextLong.getText() + mTextPressure.getText() + "\t" +
+        mTextCompass.getText() + "\n";
+
+        try{
+          OutputStreamWriter osw = new OutputStreamWriter(openFileOutput(FILENAME, Context.MODE_APPEND));
+          osw.write(dataString);
+          osw.close();
+          //Log.d(TAG, "Write: " + dataString);
+          showData(view);
+        }catch(Exception e){
+          Log.d(TAG,"Error Save: " + e.getMessage());
+        }    
   }
   
   //ShowAll onClick()
+  //************************
   public void showData(View view){
-    Toast.makeText(getApplicationContext(), "Shown",Toast.LENGTH_SHORT).show();
+    try{
+      List<String> items = new LinkedList<String>();
+      InputStream inputStream = openFileInput(FILENAME);
+      if (inputStream != null){
+        InputStreamReader isr = new InputStreamReader(inputStream);
+        BufferedReader br = new BufferedReader(isr);
+        String receiveString = "";
+        StringBuilder stringBuilder = new StringBuilder();
+        while ((receiveString = br.readLine()) != null){
+          stringBuilder.append(receiveString  + "\n");
+          items.add(receiveString + "\n");
+          //items.add(stringBuilder.toString());
+          Log.d(TAG,"Read: " + stringBuilder.toString());
+        }
+        inputStream.close();
+        String[] values = items.toArray(new String[items.size()]);        
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
+        mListViewFileData.setAdapter(mAdapter);
+      }else{
+//        String[] values = null;
+//        mAdapter.clear();
+//        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
+//        mListViewFileData.setAdapter(mAdapter);
+      }
+    } catch (FileNotFoundException e) {
+      Log.e(TAG, "File not found: " + e.toString());
+    } catch (IOException e) {
+        Log.e(TAG, "Can not read file: " + e.toString());
+    }
   }
+  
+  //Delete file onClick
+  public void deleteFile(View view){
+    //this.deleteFile(FILENAME);
+    File dir = getFilesDir(); 
+    File file = new File(dir, FILENAME);
+    boolean deleted = file.delete();
+    Log.d(TAG,"Dir: " + dir.toString());
+    Log.d(TAG,"File: " + file.toString());
+    Log.d(TAG, Boolean.toString(deleted));
+    
+    List<String> items = new LinkedList<String>();    
+    String[] values = items.toArray(new String[items.size()]);    
+    //mAdapter.clear();
+    mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
+    mListViewFileData.setAdapter(mAdapter);
+    
+   // mListViewFileData
+ //   mAdapter.clear();
+//  mListViewFileData.setAdapter(mAdapter);
+    
+//    File file = new File(FILENAME);
+//    if (file.exists()){
+//      this.deleteFile(FILENAME);  
+//      mAdapter.clear();
+//      mListViewFileData.setAdapter(mAdapter);
+//    }  
+//    //mListViewFileData.
+//    Toast.makeText(getApplicationContext(), "File deleted", Toast.LENGTH_SHORT).show();
+  }  
   
   //*********************************************************************** Date and Time Getters
   //returns date
@@ -163,7 +265,7 @@ public class MainActivity extends Activity implements SensorEventListener{
     // Register the listener with the Location Manager to receive location updates
     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-      Log.d(TAG, "locationManager.isProviderEnabled = true/gps");    
+      //Log.d(TAG, "locationManager.isProviderEnabled = true/gps");    
       locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
       location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
@@ -178,19 +280,13 @@ public class MainActivity extends Activity implements SensorEventListener{
     return location;
   }
 
-
   private void setLocation(Location location) {
-    Log.d(TAG, "Location =" + location);
+
     double latitude = location.getLatitude();
     double longitude = location.getLongitude();
-
-    // TODO: Set the text of the UI controls 
-    // to latitude and longitude.
     mTextLat.setText(Double.toString(latitude));
     mTextLong.setText(Double.toString(longitude));
-    Log.d(TAG, "Latitude = " + latitude);
-    Log.d(TAG, "Longitude = " + longitude);
-
   }
   
+
 }
