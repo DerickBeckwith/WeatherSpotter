@@ -83,8 +83,10 @@ public class MainActivity extends Activity implements SensorEventListener{
     mPressureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
     mCompassSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
    
-    showData(findViewById(R.id.textHeader));
-    updateData(findViewById(R.id.textHeader));
+    //showData(findViewById(R.id.textHeader));
+    //updateData(findViewById(R.id.textHeader));
+    updateTextViews();
+    updateListView();
   }
   
   @Override
@@ -106,6 +108,76 @@ public class MainActivity extends Activity implements SensorEventListener{
   //Update onClick()
   //************************  
   public void updateData(View view){
+    updateTextViews();
+    
+    //write to log cat
+    String dataString = mDate + "\t" + mTime + "\t" + mLatitude + "\t" + mLongitude + "\t" +
+        Float.toString(mPressureMillibars) + "\t" + Float.toString(mAzimuth);       
+    Log.d(TAG,dataString);    
+  }  
+
+  //Save onClick()
+  //************************
+  @SuppressWarnings("deprecation")
+  public void saveData(View view){
+
+    String dataString = mDate + "\t" + mTime + "\t" + mLatitude + "\t" + mLongitude + "\t" +
+        Float.toString(mPressureMillibars) + "\t" + Float.toString(mAzimuth) + "\n";   
+    
+        try{
+          OutputStreamWriter osw = new OutputStreamWriter(openFileOutput(FILENAME, Context.MODE_APPEND));
+          osw.write(dataString);
+          osw.close();
+          updateListView();
+        }catch(Exception e){
+          Log.d(TAG,"Error Save: " + e.getMessage());
+        }    
+  }
+  
+  //ShowAll onClick() - Button removed
+//  //************************
+//  public void showData(View view){
+//    updateListView();
+//  }
+  
+  //**************************************************************** DISPLAY UPDATES
+  public void updateListView(){
+    try{
+      List<String> items = new LinkedList<String>();
+      InputStream inputStream = openFileInput(FILENAME);
+      if (inputStream != null){
+        InputStreamReader isr = new InputStreamReader(inputStream);
+        BufferedReader br = new BufferedReader(isr);
+        String receiveString = "";
+        
+        StringBuilder stringBuilder = new StringBuilder();
+        while ((receiveString = br.readLine()) != null){
+          int lineNumber = 0;
+          String[] dataArray;
+          String outputString = "";
+          dataArray =receiveString.split("\t");
+          if( dataArray.length >= 6){
+            outputString = "Date: " + dataArray[0].toString() + "  Time: " + dataArray[1] + "\n" +
+                           "Lat: " + dataArray[2].toString() + " Long: " + dataArray[3] + "\n" +
+                           "Pressure: " + dataArray[4].toString() + " Az: " + dataArray[5];
+            items.add(outputString);
+          }
+          
+          stringBuilder.append(receiveString  + "\n");
+        }
+        inputStream.close();
+        String[] values = items.toArray(new String[items.size()]);        
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, values);
+        mListViewFileData.setAdapter(mAdapter);
+      }
+    } catch (FileNotFoundException e) {
+      Log.e(TAG, "File not found: " + e.toString());
+    } catch (IOException e) {
+        Log.e(TAG, "Can not read file: " + e.toString());
+    }
+  }
+
+  private void updateTextViews(){
     mDate = getDate();
     mTime = getTime();
     mTextDate.setText("Date: " + getDate());
@@ -136,61 +208,8 @@ public class MainActivity extends Activity implements SensorEventListener{
       mTextCompass.setText("Azimuth: " + Float.toString(mAzimuth));
     }else{
       mTextCompass.setText("No compass");
-    }
-    
-    //write to log cat
-    String dataString = mDate + "\t" + mTime + "\t" + mLatitude + "\t" + mLongitude + "\t" +
-        Float.toString(mPressureMillibars) + "\t" + Float.toString(mAzimuth);       
-    Log.d(TAG,dataString);    
-  }
-  
-  //Save onClick()
-  //************************
-  @SuppressWarnings("deprecation")
-  public void saveData(View view){
-
-    String dataString = mDate + "\t" + mTime + "\t" + mLatitude + "\t" + mLongitude + "\t" +
-        Float.toString(mPressureMillibars) + "\t" + Float.toString(mAzimuth) + "\n";   
-    
-        try{
-          OutputStreamWriter osw = new OutputStreamWriter(openFileOutput(FILENAME, Context.MODE_APPEND));
-          osw.write(dataString);
-          osw.close();
-          //Log.d(TAG, "Write: " + dataString);
-          showData(view);
-        }catch(Exception e){
-          Log.d(TAG,"Error Save: " + e.getMessage());
-        }    
-  }
-  
-  //ShowAll onClick() - Button removed
-  //************************
-  public void showData(View view){
-    try{
-      List<String> items = new LinkedList<String>();
-      InputStream inputStream = openFileInput(FILENAME);
-      if (inputStream != null){
-        InputStreamReader isr = new InputStreamReader(inputStream);
-        BufferedReader br = new BufferedReader(isr);
-        String receiveString = "";
-        StringBuilder stringBuilder = new StringBuilder();
-        while ((receiveString = br.readLine()) != null){
-          stringBuilder.append(receiveString  + "\n");
-          items.add(receiveString + "\n");
-          //items.add(stringBuilder.toString());
-          Log.d(TAG,"Read: " + stringBuilder.toString());
-        }
-        inputStream.close();
-        String[] values = items.toArray(new String[items.size()]);        
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
-        mListViewFileData.setAdapter(mAdapter);
-      }
-    } catch (FileNotFoundException e) {
-      Log.e(TAG, "File not found: " + e.toString());
-    } catch (IOException e) {
-        Log.e(TAG, "Can not read file: " + e.toString());
-    }
-  }
+    }    
+  }  
   
   //Delete file onClick
   public void deleteFile(View view){
@@ -251,7 +270,10 @@ public class MainActivity extends Activity implements SensorEventListener{
         mAzimuth = Math.round(event.values[0]);
       else
         mAzimuth = 0;
+      //Log.d(TAG, Float.toString(mAzimuth));
     }
+    
+    updateTextViews();    
   }
 
 //**************************************************************************** Position
@@ -299,13 +321,5 @@ public class MainActivity extends Activity implements SensorEventListener{
     return location;
   }
 
-//  private void setLocation(Location location) {
-//
-//    double latitude = location.getLatitude();
-//    double longitude = location.getLongitude();
-//    mTextLat.setText(Double.toString(latitude));
-//    mTextLong.setText(Double.toString(longitude));
-//  }
-  
 
 }
