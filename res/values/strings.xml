@@ -7,4 +7,7 @@
     <string name="buttonSave">Save</string>
     <string name="buttonShow">Show All</string>
     <string name="buttonDelete">Delete</string>
+    <string name="title_activity_compass">Compass</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
