@@ -10,4 +10,6 @@
     <string name="title_activity_history">HistoryActivity</string>
     <string name="hello_world">Hello world!</string>
 	<string name="buttonHistory">History</string>
+    <string name="title_activity_compass">Compass</string>
+    <string name="buttonCompass">Compass</string>	
 </resources>

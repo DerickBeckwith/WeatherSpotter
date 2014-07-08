@@ -28,6 +28,12 @@
             android:name="com.mush4brains.spotter.HistoryActivity"
             android:label="@string/title_activity_history" >
         </activity>
+        <activity
+            android:name="com.mush4brains.spotter.CompassActivity"
+             >
+        </activity>
+        
+        
     </application>
 
 </manifest>

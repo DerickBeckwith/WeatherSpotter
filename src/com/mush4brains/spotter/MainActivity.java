@@ -32,6 +32,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 public class MainActivity extends Activity implements SensorEventListener{
   public static String TAG = "MainActivity";
   public static String FILENAME = "SpotterLog.txt";
@@ -286,4 +287,16 @@ public class MainActivity extends Activity implements SensorEventListener{
     }    
   }    
 
+
+	/*
+	 * Handles the Show Compass button's onClick event.
+	 */
+	public void showCompass(View view) {
+		Intent compassIntent = new Intent(this, CompassActivity.class);
+		Log.d(TAG,"showCompass");
+		
+		startActivity(compassIntent);
+	}
+
+	
 }
