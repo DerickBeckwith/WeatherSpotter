@@ -12,20 +12,12 @@
         android:layout_alignParentTop="true"
         android:text="@string/main_label" />
 
-    <TextView
-        android:id="@+id/textViewDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textHeader"
-        android:text="TextView" />
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textViewDate"
+        android:layout_below="@+id/textHeader"
         android:orientation="vertical" >
 
         <TextView
@@ -97,9 +89,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/listViewFile"
-        android:layout_marginLeft="36dp"
         android:layout_toRightOf="@+id/buttonSave"
         android:onClick="deleteFile"
         android:text="@string/buttonDelete" />
+
+    <Button
+        android:id="@+id/buttonHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_toRightOf="@+id/buttonDelete"
+        android:onClick="gotoHistory"
+        android:text="@string/buttonHistory" />
 
 </RelativeLayout>
