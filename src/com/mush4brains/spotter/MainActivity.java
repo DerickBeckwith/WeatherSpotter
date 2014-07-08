@@ -193,6 +193,9 @@ public class MainActivity extends Activity implements SensorEventListener {
 		}
 	}
 
+	/*
+	 * Handles the Show Activity button's onClick event.
+	 */
 	public void showCompass(View view) {
 		Intent compassIntent = new Intent(this, CompassActivity.class);
 		startActivity(compassIntent);
