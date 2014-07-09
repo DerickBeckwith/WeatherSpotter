@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Spotter</string>
+    <string name="app_name">Weather Spotter Tool</string>
     <string name="main_label">Weather Spotter Data</string>
     <string name="buttonUpdate">Update</string>
     <string name="buttonSave">Save</string>

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -44,9 +45,9 @@ public class MainActivity extends Activity implements SensorEventListener{
   TextView mTextLong = null;
   TextView mTextPressure = null;
   TextView mTextCompass = null;
-  ListView mListViewFileData = null;
+  //ListView mListViewFileData = null;
    
-  ArrayAdapter<String> mAdapter;
+  //ArrayAdapter<String> mAdapter;
   private SensorManager mSensorManager;  
   private Sensor mPressureSensor;  
   private Sensor mCompassSensor;
@@ -64,6 +65,9 @@ public class MainActivity extends Activity implements SensorEventListener{
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    
+    setTitle("Weather Spotter Reporter - v0.1");
+    
     
     //assign all views
     mTextHeader = (TextView)findViewById(R.id.textHeader);
@@ -153,10 +157,10 @@ public class MainActivity extends Activity implements SensorEventListener{
     Log.d(TAG, Boolean.toString(deleted));
     
     //clears adapter and list view
-    List<String> items = new LinkedList<String>();    
-    String[] values = items.toArray(new String[items.size()]);    
-    mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
-    mListViewFileData.setAdapter(mAdapter);    
+    //List<String> items = new LinkedList<String>();    
+    //String[] values = items.toArray(new String[items.size()]);    
+    //mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
+    //mListViewFileData.setAdapter(mAdapter);    
   }  
   
   //cloud onClick
@@ -271,22 +275,29 @@ public class MainActivity extends Activity implements SensorEventListener{
     mTextDate.setText("Date: " + getDate());
     mTextTime.setText("Time: " + getTime());
     
-    if(mPressureSensorExists){
-      mTextPressure.setText("Pressure: " + Float.toString(mPressureMillibars) + " mb");
+    if(mPressureSensorExists){      
+      try{
+        DecimalFormat df = new DecimalFormat("####.00");
+        mTextPressure.setText("Pressure: " + df.format(mPressureMillibars) );
+      }catch(Exception e){        
+      }
     }else{
       mTextPressure.setText("No pressure sensor");
     }
       
     Location location = getLocation();
     if(location != null){
-      //setLocation(location);
-      double latitude = location.getLatitude();
-      double longitude = location.getLongitude();
-      mLatitude = latitude;
-      mLongitude = longitude;
+      try{
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        mLatitude = latitude;
+        mLongitude = longitude;
+        DecimalFormat df = new DecimalFormat("###.0000");
+        mTextLat.setText("Latitude: " + df.format(latitude));
+        mTextLong.setText("Longitude: " + df.format(longitude));
+      }catch(Exception e){      
+      }
       
-      mTextLat.setText("Latitude: " + Double.toString(latitude));
-      mTextLong.setText("Longitude: " + Double.toString(longitude));      
     }else{
       mTextLat.setText("Latitude unavailable");
       mTextLong.setText("Latitude unavailable");
