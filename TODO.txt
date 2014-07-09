@@ -1,0 +1,39 @@
+ // Weather Spotter Tool - TODO List
+ // When an item is completed it is move to the COMPLETED section.
+
+ 
+ //************************************************ TODO List
+ //MainActivity
+ * MainActivity - Move 'Delete' History icon and functionality to HistoryActivity.
+ * MainActivity - Add prompt indicated that a data point has been added to history.
+ * MainActivity - Pass basic data to ReportActivity via intent/bundle
+ * MainActivity - Collect items as icons are pressed (e.g. cloud, funnel, etc.) 
+ * MainActivity - Add basic options.
+ * MainActivity - Prompts user for his/her name to be used with National Weather Service (NWS).  Saves preferences.
+ * MainActivity - Prompts user for NWS reporting phone number. Saves preferences.
+ * MainActivity - Prompts user for NWS reporting email. Saves preferences.
+ * MainActivity - Create class to convert latitude and longitude to locations using API.
+ * MainActivity - Construct icons related to weather reporting elements.
+  
+ //ReportActivity
+ * ReportActivity - Create ReportActivity and start from MainActivity
+ * ReportActivity - process received bundle of data from MainActivity
+ * ReportActivity - Convert data received from MainActivity into human readable text
+ 
+ 
+ //CompassActivity
+ * CompassActivity - Place azimuth functionality into a class that may be instantiated.
+ * CompassActivity - Improve graphics
+ * CompassActivity - Display azimuth in decimal value
+ * CompassActivity - Display azimuth in text such as N,S,SE,E-SE,W-NW 
+ 
+ //HistoryActivity
+ * Setup Delete History icon and functionality.
+ * Add 'Are you sure?' alert to user when deleting all history.
+ * Add Message icon to send selected history data point via Message
+ * Add Email icon to send all history via Email
+ 
+ 
+ //************************************************ COMPLETED List
+ 
+ 
