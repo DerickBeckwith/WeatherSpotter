@@ -57,14 +57,6 @@
             android:text="TextView" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listViewFile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/buttonUpdate" >
-    </ListView>
-
     <Button
         android:id="@+id/buttonUpdate"
         android:layout_width="wrap_content"
@@ -84,11 +76,43 @@
         android:text="@string/buttonSave" />
 
     <Button
+        android:id="@+id/buttonCloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="processCloud"
+        android:layout_alignBaseline="@+id/buttonTornado"
+        android:layout_alignBottom="@+id/buttonTornado"
+        android:layout_alignParentLeft="true"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/ic_72x72_cloud" />
+
+    <Button
+        android:id="@+id/buttonFunnel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="processFunnel"
+        android:layout_below="@+id/buttonUpdate"
+        android:layout_toRightOf="@+id/buttonCloud"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/ic_72x72_cloud_funnel" />
+
+    
+    <Button
+        android:id="@+id/buttonTornado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="processTunnel"
+        android:layout_below="@+id/buttonSave"
+        android:layout_toRightOf="@+id/buttonFunnel"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/ic_72x72_cloud_tornado" />
+
+    <Button
         android:id="@+id/buttonDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/listViewFile"
-        android:layout_toRightOf="@+id/buttonSave"
+        android:layout_above="@+id/buttonTornado"
+        android:layout_toRightOf="@+id/buttonHistory"
         android:onClick="deleteFile"
         android:text="@string/buttonDelete" />
 
@@ -96,8 +120,10 @@
         android:id="@+id/buttonCompass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/linearLayout1"
-        android:layout_toRightOf="@+id/buttonDelete"
+        android:layout_alignBottom="@+id/buttonDelete"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/ic_72x72_compass"         
         android:onClick="showCompass"
         android:text="@string/buttonCompass" />
 
@@ -105,8 +131,8 @@
         android:id="@+id/buttonHistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/listViewFile"
-        android:layout_alignLeft="@+id/buttonCompass"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
         android:onClick="gotoHistory"
         android:text="@string/buttonHistory" />
 

@@ -73,7 +73,7 @@ public class MainActivity extends Activity implements SensorEventListener{
     mTextLong = (TextView)findViewById(R.id.textViewLongitude);
     mTextPressure = (TextView)findViewById(R.id.textViewPressure);
     mTextCompass = (TextView)findViewById(R.id.textViewCompass);
-    mListViewFileData = (ListView)findViewById(R.id.listViewFile);
+    //mListViewFileData = (ListView)findViewById(R.id.listViewFile);
     
     //verify existence of humidity sensor
     PackageManager packageManager = this.getPackageManager();
@@ -156,10 +156,22 @@ public class MainActivity extends Activity implements SensorEventListener{
     List<String> items = new LinkedList<String>();    
     String[] values = items.toArray(new String[items.size()]);    
     mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
-    mListViewFileData.setAdapter(mAdapter);
-    
-
+    mListViewFileData.setAdapter(mAdapter);    
   }  
+  
+  //cloud onClick
+  public void processCloud(View v){
+    Toast.makeText(getApplicationContext(), "Cloud clicked", Toast.LENGTH_SHORT).show();
+  }
+  //cloud onClick
+  public void processFunnel(View v){
+    Toast.makeText(getApplicationContext(), "Funnel clicked", Toast.LENGTH_SHORT).show();
+  }
+  //cloud onClick
+  public void processTornado(View v){
+    Toast.makeText(getApplicationContext(), "Tornado clicked", Toast.LENGTH_SHORT).show();
+  }
+
   
   //*********************************************************************** Date and Time Getters
   //returns date
