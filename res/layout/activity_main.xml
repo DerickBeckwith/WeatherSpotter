@@ -16,8 +16,8 @@
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/textHeader"
+        android:layout_centerHorizontal="true"
         android:orientation="vertical" >
 
         <TextView
@@ -55,85 +55,105 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
+        <GridLayout
+            android:id="@+id/gridIcons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:columnCount="5"
+            android:rowCount="1" >
+
+            <Button
+                android:id="@+id/buttonUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_check"
+                android:onClick="updateData"
+                android:text="@string/buttonUpdate" />
+
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearLayout1"
+                android:layout_toRightOf="@+id/buttonUpdate"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_save"
+                android:onClick="saveData"
+                android:text="@string/buttonSave" />
+
+            <Button
+                android:id="@+id/buttonDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="3"
+                android:layout_toRightOf="@+id/buttonHistory"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_trash"
+                android:onClick="deleteFile"
+                android:text="@string/buttonDelete" />
+
+            <Button
+                android:id="@+id/buttonHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_gravity="left|top"
+                android:layout_row="0"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_history"
+                android:onClick="gotoHistory"
+                android:text="@string/buttonHistory" />
+
+            <Button
+                android:id="@+id/buttonCompass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_compass"
+                android:onClick="showCompass"
+                android:text="@string/buttonCompass" />
+        </GridLayout>
+
+        <GridLayout
+            android:id="@+id/gridIcons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonSave"
+            android:layout_marginTop="43dp"
+            android:columnCount="4"
+            android:rowCount="4" >
+
+            <Button
+                android:id="@+id/buttonCloud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_cloud"
+                android:onClick="processCloud" />
+
+            <Button
+                android:id="@+id/buttonFunnel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_cloud_funnel"
+                android:onClick="processFunnel" />
+
+            <Button
+                android:id="@+id/buttonTornado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_cloud_tornado"
+                android:onClick="processTornado" />
+        </GridLayout>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/buttonUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/buttonSave"
-        android:onClick="updateData"
-        android:text="@string/buttonUpdate" />
-
-    <Button
-        android:id="@+id/buttonSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout1"
-        android:layout_toRightOf="@+id/buttonUpdate"
-        android:onClick="saveData"
-        android:text="@string/buttonSave" />
-
-    <Button
-        android:id="@+id/buttonCloud"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="processCloud"
-        android:layout_alignBaseline="@+id/buttonTornado"
-        android:layout_alignBottom="@+id/buttonTornado"
-        android:layout_alignParentLeft="true"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/ic_72x72_cloud" />
-
-    <Button
-        android:id="@+id/buttonFunnel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="processFunnel"
-        android:layout_below="@+id/buttonUpdate"
-        android:layout_toRightOf="@+id/buttonCloud"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/ic_72x72_cloud_funnel" />
-
-    
-    <Button
-        android:id="@+id/buttonTornado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="processTunnel"
-        android:layout_below="@+id/buttonSave"
-        android:layout_toRightOf="@+id/buttonFunnel"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/ic_72x72_cloud_tornado" />
-
-    <Button
-        android:id="@+id/buttonDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonTornado"
-        android:layout_toRightOf="@+id/buttonHistory"
-        android:onClick="deleteFile"
-        android:text="@string/buttonDelete" />
-
-    <Button
-        android:id="@+id/buttonCompass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonDelete"
-        android:layout_alignParentRight="true"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/ic_72x72_compass"         
-        android:onClick="showCompass"
-        android:text="@string/buttonCompass" />
-
-    <Button
-        android:id="@+id/buttonHistory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout1"
-        android:layout_centerHorizontal="true"
-        android:onClick="gotoHistory"
-        android:text="@string/buttonHistory" />
 
 </RelativeLayout>
