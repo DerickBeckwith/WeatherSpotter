@@ -14,6 +14,7 @@
  * MainActivity - Prompts user for NWS reporting email. Saves preferences.
  * MainActivity - Create class to convert latitude and longitude to locations using API.
  * MainActivity - Construct icons related to weather reporting elements.
+ * MainActivity - Figure out transparency and alpha for button icons.
   
  //ReportActivity
  * ReportActivity - Create ReportActivity and start from MainActivity
@@ -34,6 +35,6 @@
  * Add Email icon to send all history via Email
  
  
- //************************************************ COMPLETED List
+ //************************************************ COMPLETED List for version v0.2
  
  

@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     tools:context="${packageName}.${activityClass}" >
 
@@ -26,9 +26,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="left"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_check"
-                android:onClick="updateData"
-                android:text="@string/buttonUpdate" />
+                android:drawableTop="@drawable/ic_72x72_check_a"
+                android:onClick="updateData" />
 
             <Button
                 android:id="@+id/buttonSave"
@@ -38,9 +37,8 @@
                 android:layout_gravity="left"
                 android:layout_toRightOf="@+id/buttonUpdate"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_save"
-                android:onClick="saveData"
-                android:text="@string/buttonSave" />
+                android:drawableTop="@drawable/ic_72x72_save_a"
+                android:onClick="saveData" />
 
             <Button
                 android:id="@+id/buttonDelete"
@@ -50,9 +48,8 @@
                 android:layout_gravity="left"
                 android:layout_toRightOf="@+id/buttonHistory"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_trash"
-                android:onClick="deleteFile"
-                android:text="@string/buttonDelete" />
+                android:drawableTop="@drawable/ic_72x72_trash_a"
+                android:onClick="deleteFile" />
 
             <Button
                 android:id="@+id/buttonHistory"
@@ -62,9 +59,8 @@
                 android:layout_gravity="left|top"
                 android:layout_row="0"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_history"
-                android:onClick="gotoHistory"
-                android:text="@string/buttonHistory" />
+                android:drawableTop="@drawable/ic_72x72_history_a"
+                android:onClick="gotoHistory" />
 
             <Button
                 android:id="@+id/buttonCompass"
@@ -72,9 +68,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_compass"
-                android:onClick="showCompass"
-                android:text="@string/buttonCompass" />
+                android:drawableTop="@drawable/ic_72x72_compass_a"
+                android:onClick="showCompass" />
+
         </GridLayout>
 
         <GridLayout
@@ -159,7 +155,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_cloud"
+                android:alpha="1.0"
+                android:drawableTop="@drawable/ic_72x72_cloud_a"
                 android:onClick="processCloud" />
 
             <Button
@@ -168,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_cloud_funnel"
+                android:drawableTop="@drawable/ic_72x72_cloud_funnel_a"
                 android:onClick="processFunnel" />
 
             <Button
@@ -177,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_cloud_tornado"
+                android:drawableTop="@drawable/ic_72x72_cloud_tornado_a"
                 android:onClick="processTornado" />
         </GridLayout>
     </LinearLayout>
