@@ -16,7 +16,7 @@
             android:id="@+id/gridControls"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:columnCount="5"
+            android:columnCount="4"
             android:rowCount="1" >
 
             <Button
@@ -39,17 +39,6 @@
                 android:background="@android:color/transparent"
                 android:drawableTop="@drawable/ic_72x72_save_a"
                 android:onClick="saveData" />
-
-            <Button
-                android:id="@+id/buttonDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="3"
-                android:layout_gravity="left"
-                android:layout_toRightOf="@+id/buttonHistory"
-                android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_trash_a"
-                android:onClick="deleteFile" />
 
             <Button
                 android:id="@+id/buttonHistory"

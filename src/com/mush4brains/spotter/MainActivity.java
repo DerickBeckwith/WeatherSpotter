@@ -134,7 +134,8 @@ public class MainActivity extends Activity implements SensorEventListener{
           OutputStreamWriter osw = new OutputStreamWriter(openFileOutput(FILENAME, Context.MODE_APPEND));
           osw.write(dataString);
           osw.close();
-          //updateListView();
+          
+          Toast.makeText(getApplicationContext(), "Data point saved!", Toast.LENGTH_SHORT).show();
         }catch(Exception e){
           Log.d(TAG,"Error Save: " + e.getMessage());
         }    
@@ -145,24 +146,7 @@ public class MainActivity extends Activity implements SensorEventListener{
     Intent intent = new Intent(getApplication(),HistoryActivity.class);
     startActivity(intent);    
   }
- 
-  //Delete file onClick
-  public void deleteFile(View view){
-    //this.deleteFile(FILENAME);
-    File dir = getFilesDir(); 
-    File file = new File(dir, FILENAME);
-    boolean deleted = file.delete();
-    Log.d(TAG,"Dir: " + dir.toString());
-    Log.d(TAG,"File: " + file.toString());
-    Log.d(TAG, Boolean.toString(deleted));
-    
-    //clears adapter and list view
-    //List<String> items = new LinkedList<String>();    
-    //String[] values = items.toArray(new String[items.size()]);    
-    //mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, values);
-    //mListViewFileData.setAdapter(mAdapter);    
-  }  
-  
+
   //cloud onClick
   public void processCloud(View v){
     Toast.makeText(getApplicationContext(), "Cloud clicked", Toast.LENGTH_SHORT).show();

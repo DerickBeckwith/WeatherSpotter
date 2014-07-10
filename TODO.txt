@@ -4,7 +4,7 @@
  
  //************************************************ TODO List
  //MainActivity
- * MainActivity - Move 'Delete' History icon and functionality to HistoryActivity.
+
  * MainActivity - Add prompt indicated that a data point has been added to history.
  * MainActivity - Pass basic data to ReportActivity via intent/bundle
  * MainActivity - Collect items as icons are pressed (e.g. cloud, funnel, etc.) 
@@ -14,8 +14,9 @@
  * MainActivity - Prompts user for NWS reporting email. Saves preferences.
  * MainActivity - Create class to convert latitude and longitude to locations using API.
  * MainActivity - Construct icons related to weather reporting elements.
- * MainActivity - Figure out transparency and alpha for button icons.
-  
+ * MainActivity - Add timer that periodically updates text displays, overriding onSensorChange()
+
+ 
  //ReportActivity
  * ReportActivity - Create ReportActivity and start from MainActivity
  * ReportActivity - process received bundle of data from MainActivity
@@ -29,12 +30,13 @@
  * CompassActivity - Display azimuth in text such as N,S,SE,E-SE,W-NW 
  
  //HistoryActivity
- * Setup Delete History icon and functionality.
- * Add 'Are you sure?' alert to user when deleting all history.
- * Add Message icon to send selected history data point via Message
- * Add Email icon to send all history via Email
+ * HistoryActivity - Add 'Are you sure?' alert to user when deleting all history.
+ * HistoryActivity - Add Message icon to send selected history data point via Message
  
  
  //************************************************ COMPLETED List for version v0.2
- 
- 
+ * MainActivity - Move 'Delete' History icon and functionality to HistoryActivity.
+ * HistoryActivity - Setup Delete History icon and functionality.
+ * HistoryActivity - Add Email icon to send all history via Email
+ * MainActivity - Figure out transparency and alpha for button icons.
+    

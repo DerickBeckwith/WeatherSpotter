@@ -4,13 +4,52 @@
     android:layout_height="match_parent"
     tools:context="${packageName}.${activityClass}" >
 
-    <ListView
-        android:id="@+id/listViewHistory"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-         >
+        android:layout_below="@+id/textHeader"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical" >    
+    
+        <GridLayout
+            android:id="@+id/gridControls"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:columnCount="5"
+            android:rowCount="1" >
 
-    </ListView>
+            <Button
+                android:id="@+id/buttonEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="left"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_email_a"
+                android:onClick="sendEmail" />
 
+            <Button
+                android:id="@+id/buttonDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="3"
+                android:layout_gravity="left"
+                android:layout_toRightOf="@+id/buttonHistory"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_trash_a"
+                android:onClick="deleteFile" />
+
+        </GridLayout>    
+    
+	    <ListView
+	        android:id="@+id/listViewHistory"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	         >
+	
+	    </ListView>
+    </LinearLayout>
+	    
 </RelativeLayout>
