@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
@@ -54,6 +56,11 @@ public class MainActivity extends Activity{
   private String mTime;
   private Double mLatitude;
   private Double mLongitude;
+  
+  int mCount = 0;
+  
+  MyTimerTask myTask;// = new MyTimerTask();
+  Timer myTimer = new Timer();   
   
   //********************************************************************** Activity Lifecycle Methods
   //onClick()
@@ -190,8 +197,7 @@ public class MainActivity extends Activity{
 
     // Register the listener with the Location Manager to receive location updates
     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-
-      //Log.d(TAG, "locationManager.isProviderEnabled = true/gps");    
+  
       locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
       location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
@@ -242,7 +248,8 @@ public class MainActivity extends Activity{
     }
     
     if(mSensors.hasCompass()){
-      mTextCompass.setText("Azimuth: " + Double.toString(mSensors.getAzimuth()));
+      DecimalFormat df = new DecimalFormat("###.0");
+      mTextCompass.setText("Azimuth: " + df.format(mSensors.getAzimuth()));
     }else{
       mTextCompass.setText("No compass");
     }    
@@ -253,10 +260,45 @@ public class MainActivity extends Activity{
 	 */
 	public void showCompass(View view) {
 		Intent compassIntent = new Intent(this, CompassActivity.class);
-		Log.d(TAG,"showCompass");
-		
 		startActivity(compassIntent);
 	}
 
 	
+	//******************************************************************* SCHEDULER - TIMED
+	 public void onStartButtonClick(View view){
+	    try{
+	      myTask = new MyTimerTask();
+	      myTimer.schedule(myTask, 1000, 2000);
+	    }catch(Exception e){
+	      Log.d(TAG, e.getMessage());
+	    }finally{
+	      
+	    }    
+	  }
+
+	  public void onPauseButtonClick(View view){	    
+	    try{
+	      myTask.cancel();
+	    }catch(Exception e){
+	      Log.d(TAG, e.getMessage());
+	    }finally{
+
+	    }
+	  }  
+
+	  public void onResetButtonClick(View view){
+	    myTask.cancel();
+	  }
+
+	  //contains run that is called every time interval
+	  class MyTimerTask extends TimerTask{
+	    public void run(){
+	      runOnUiThread(new Runnable(){
+	        public void run(){
+	          updateTextViews();
+	        }
+	      });
+
+	    }
+	  }		
 }

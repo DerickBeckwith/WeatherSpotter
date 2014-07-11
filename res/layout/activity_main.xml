@@ -27,7 +27,7 @@
                 android:layout_gravity="left"
                 android:background="@android:color/transparent"
                 android:drawableTop="@drawable/ic_72x72_check_a"
-                android:onClick="updateData" />
+                android:onClick="onStartButtonClick" />
 
             <Button
                 android:id="@+id/buttonSave"
