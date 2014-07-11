@@ -1,11 +1,18 @@
 package com.mush4brains.spotter;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.mush4brains.spotter.MainActivity.MyTimerTask;
+
 import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 public class CompassActivity extends Activity implements SensorEventListener {
@@ -25,6 +32,8 @@ public class CompassActivity extends Activity implements SensorEventListener {
 	TextView readingAzimuth, readingPitch, readingRoll;
 	Compass myCompass;
 
+
+  
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,20 +62,19 @@ public class CompassActivity extends Activity implements SensorEventListener {
 
 	@Override
 	protected void onResume() {
-
+	  super.onResume();
 		sensorManager.registerListener(this, sensorAccelerometer,
 				SensorManager.SENSOR_DELAY_NORMAL);
 		sensorManager.registerListener(this, sensorMagneticField,
 				SensorManager.SENSOR_DELAY_NORMAL);
-		super.onResume();
+
 	}
 
 	@Override
 	protected void onPause() {
-
+		super.onPause();
 		sensorManager.unregisterListener(this, sensorAccelerometer);
 		sensorManager.unregisterListener(this, sensorMagneticField);
-		super.onPause();
 	}
 
 	@Override
@@ -102,12 +110,13 @@ public class CompassActivity extends Activity implements SensorEventListener {
 			double pitch = Math.toDegrees(matrixValues[1]);
 			double roll = Math.toDegrees(matrixValues[2]);
 
-			readingAzimuth.setText("Azimuth: " + String.valueOf(azimuth));
-			readingPitch.setText("Pitch: " + String.valueOf(pitch));
-			readingRoll.setText("Roll: " + String.valueOf(roll));
+			readingAzimuth.setText("Azimuth: " + Double.toString(azimuth));
+			readingPitch.setText("Pitch: " + Double.toString(pitch));
+			readingRoll.setText("Roll: " + Double.toString(roll));
 
 			myCompass.update(matrixValues[0]);
 		}
 
 	}
+			
 }

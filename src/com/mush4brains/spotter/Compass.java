@@ -4,26 +4,32 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
   
 public class Compass extends View {
   
  private float direction;
-   
+ private Context mContext;
+ 
  public Compass(Context context) {
   super(context);
   // TODO Auto-generated constructor stub
+  mContext = context;
  }
   
  public Compass(Context context, AttributeSet attrs) {
   super(context, attrs);
   // TODO Auto-generated constructor stub
+  mContext = context;
  }
   
  public Compass(Context context, AttributeSet attrs, int defStyle) {
   super(context, attrs, defStyle);
   // TODO Auto-generated constructor stub
+  mContext = context;
  }
   
  @Override
@@ -35,7 +41,11 @@ public class Compass extends View {
   
  @Override
  protected void onDraw(Canvas canvas) {
-    
+
+
+  int width = 0;//canvas.getWidth()/2;
+  int height = 0;//canvas.getHeight()/2;
+   
   int w = getMeasuredWidth();
   int h = getMeasuredHeight();
   int r;
@@ -50,14 +60,14 @@ public class Compass extends View {
   paint.setStrokeWidth(5);
   paint.setColor(Color.WHITE);
     
-  canvas.drawCircle(w/2, h/2, r, paint);
+  canvas.drawCircle(width + w/2, height + h/2, r, paint);
     
   paint.setColor(Color.RED);
   canvas.drawLine(
-    w/2,
-    h/2,
-    (float)(w/2 + r * Math.sin(-direction)),
-    (float)(h/2 - r * Math.cos(-direction)),
+    width + w/2,
+    height + h/2,
+    (float)(width + w/2 + r * Math.sin(-direction)),
+    (float)(height + h/2 - r * Math.cos(-direction)),
     paint);
   
  }

@@ -56,9 +56,7 @@ public class MainActivity extends Activity{
   private String mTime;
   private Double mLatitude;
   private Double mLongitude;
-  
-  int mCount = 0;
-  
+ 
   MyTimerTask myTask;// = new MyTimerTask();
   Timer myTimer = new Timer();   
   
@@ -150,6 +148,13 @@ public class MainActivity extends Activity{
     Toast.makeText(getApplicationContext(), "Tornado clicked", Toast.LENGTH_SHORT).show();
   }
 
+  
+ // Handles the Show Compass button's onClick event.
+
+  public void showCompass(View view) {
+    Intent compassIntent = new Intent(this, CompassActivity.class);
+    startActivity(compassIntent);
+  }
   
   //*********************************************************************** Date and Time Getters
   //returns date
@@ -255,15 +260,6 @@ public class MainActivity extends Activity{
     }    
   }    
 
-	/*
-	 * Handles the Show Compass button's onClick event.
-	 */
-	public void showCompass(View view) {
-		Intent compassIntent = new Intent(this, CompassActivity.class);
-		startActivity(compassIntent);
-	}
-
-	
 	//******************************************************************* SCHEDULER - TIMED
 	 public void onStartButtonClick(View view){
 	    try{
