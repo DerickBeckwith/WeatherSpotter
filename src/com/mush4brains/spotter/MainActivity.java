@@ -34,9 +34,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity extends Activity implements SensorEventListener{
+public class MainActivity extends Activity{
   public static String TAG = "MainActivity";
   public static String FILENAME = "SpotterLog.txt";
+  
+  MySensors mSensors;
   
   TextView mTextHeader = null;
   TextView mTextDate = null;
@@ -45,14 +47,7 @@ public class MainActivity extends Activity implements SensorEventListener{
   TextView mTextLong = null;
   TextView mTextPressure = null;
   TextView mTextCompass = null;
-  //ListView mListViewFileData = null;
-   
-  //ArrayAdapter<String> mAdapter;
-  private SensorManager mSensorManager;  
-  private Sensor mPressureSensor;  
-  private Sensor mCompassSensor;
-  private Boolean mPressureSensorExists = false;
-  private Boolean mCompassSensorExists = false;
+
   private float mPressureMillibars;
   private float mAzimuth;
   private String mDate;
@@ -61,13 +56,13 @@ public class MainActivity extends Activity implements SensorEventListener{
   private Double mLongitude;
   
   //********************************************************************** Activity Lifecycle Methods
+  //onClick()
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     
     setTitle("Weather Spotter Reporter - v0.1");
-    
     
     //assign all views
     mTextHeader = (TextView)findViewById(R.id.textHeader);
@@ -77,40 +72,28 @@ public class MainActivity extends Activity implements SensorEventListener{
     mTextLong = (TextView)findViewById(R.id.textViewLongitude);
     mTextPressure = (TextView)findViewById(R.id.textViewPressure);
     mTextCompass = (TextView)findViewById(R.id.textViewCompass);
-    //mListViewFileData = (ListView)findViewById(R.id.listViewFile);
     
-    //verify existence of humidity sensor
-    PackageManager packageManager = this.getPackageManager();
-    mPressureSensorExists = packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_BAROMETER);
-    mCompassSensorExists = packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_COMPASS);
-    
-    //setup sensor manager
-    mSensorManager = (SensorManager) getSystemService(this.SENSOR_SERVICE);
-    mPressureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
-    mCompassSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-   
-    //showData(findViewById(R.id.textHeader));
-    //updateData(findViewById(R.id.textHeader));
+    mSensors = new MySensors(this.getBaseContext()); 
     updateTextViews();
-    //updateListView();
+
   }
   
+  //onResume()
   @Override
   protected void onResume() {
     // Register a listener for the sensor.
     super.onResume();
-    mSensorManager.registerListener(this, mPressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
-    mSensorManager.registerListener(this, mCompassSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    mSensors.register();
   }
 
+  //onPause()
   @Override
   protected void onPause() {
-    // Be sure to unregister the sensor when the activity pauses.
     super.onPause();
-    mSensorManager.unregisterListener(this);
+    mSensors.unregister();
   }    
   
-  //********************************************************************** onClick()
+  //********************************************************************** onClick() button events
   //Update onClick()
   //************************  
   public void updateData(View view){
@@ -118,7 +101,7 @@ public class MainActivity extends Activity implements SensorEventListener{
     
     //write to log cat
     String dataString = mDate + "\t" + mTime + "\t" + mLatitude + "\t" + mLongitude + "\t" +
-        Float.toString(mPressureMillibars) + "\t" + Float.toString(mAzimuth);       
+        Float.toString(mSensors.getPressure()) + "\t" + Double.toString(mSensors.getAzimuth());       
     Log.d(TAG,dataString);    
   }  
 
@@ -177,35 +160,6 @@ public class MainActivity extends Activity implements SensorEventListener{
     text = (dateFormat.format(new Date())).toString();
     return text;
   }
-  
-  //**************************************************************************** Sensor listener methods
-  @Override
-  public final void onAccuracyChanged(Sensor sensor, int accuracy) {
-    // Do something here if sensor accuracy changes.    
-  }  
-  
-  @Override
-  public final void onSensorChanged(SensorEvent event) {
-  
-    Sensor sensor = event.sensor;
-
-    if (sensor.getType() == Sensor.TYPE_PRESSURE){
-      if (mPressureSensorExists)
-        mPressureMillibars = event.values[0];
-      else
-        mPressureMillibars = 0;
-    }
-    
-    if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
-      if (mCompassSensorExists)
-        mAzimuth = Math.round(event.values[0]);
-      else
-        mAzimuth = 0;
-      //Log.d(TAG, Float.toString(mAzimuth));
-    }
-    
-    updateTextViews();    
-  }
 
 //**************************************************************************** Position
   private Location getLocation(){
@@ -259,10 +213,10 @@ public class MainActivity extends Activity implements SensorEventListener{
     mTextDate.setText("Date: " + getDate());
     mTextTime.setText("Time: " + getTime());
     
-    if(mPressureSensorExists){      
+    if(mSensors.hasPressure()){      
       try{
         DecimalFormat df = new DecimalFormat("####.00");
-        mTextPressure.setText("Pressure: " + df.format(mPressureMillibars) );
+        mTextPressure.setText("Pressure: " + df.format(mSensors.getPressure()) );
       }catch(Exception e){        
       }
     }else{
@@ -287,13 +241,12 @@ public class MainActivity extends Activity implements SensorEventListener{
       mTextLong.setText("Latitude unavailable");
     }
     
-    if(mCompassSensorExists){
-      mTextCompass.setText("Azimuth: " + Float.toString(mAzimuth));
+    if(mSensors.hasCompass()){
+      mTextCompass.setText("Azimuth: " + Double.toString(mSensors.getAzimuth()));
     }else{
       mTextCompass.setText("No compass");
     }    
   }    
-
 
 	/*
 	 * Handles the Show Compass button's onClick event.
