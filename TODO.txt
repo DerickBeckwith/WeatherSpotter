@@ -1,11 +1,16 @@
  // Weather Spotter Tool - TODO List
  // When an item is completed it is move to the COMPLETED section.
 
- 
+//References
+// https://developers.google.com/maps/tutorials/fundamentals/adding-a-google-map#the_basic_html_page
+//API Key:
+//AIzaSyBvFgthsenWGwnjD0RL3CBpxhp1sZ1bVAM
+//eclectic1993@gmail.com
+//http://maps.googleapis.com/maps/api/geocode/json?latlng=32.95918,-80.15468&sensor=true
+
  //************************************************ TODO List
  //MainActivity
-
- * MainActivity - Add prompt indicated that a data point has been added to history.
+ 
  * MainActivity - Pass basic data to ReportActivity via intent/bundle
  * MainActivity - Collect items as icons are pressed (e.g. cloud, funnel, etc.) 
  * MainActivity - Add basic options.
@@ -14,8 +19,6 @@
  * MainActivity - Prompts user for NWS reporting email. Saves preferences.
  * MainActivity - Create class to convert latitude and longitude to locations using API.
  * MainActivity - Construct icons related to weather reporting elements.
- * MainActivity - Add timer that periodically updates text displays, overriding onSensorChange()
-
  
  //ReportActivity
  * ReportActivity - Create ReportActivity and start from MainActivity
@@ -24,7 +27,6 @@
  
  
  //CompassActivity
- * CompassActivity - Place azimuth functionality into a class that may be instantiated.
  * CompassActivity - Improve graphics
  * CompassActivity - Display azimuth in decimal value
  * CompassActivity - Display azimuth in text such as N,S,SE,E-SE,W-NW 
@@ -39,4 +41,9 @@
  * HistoryActivity - Setup Delete History icon and functionality.
  * HistoryActivity - Add Email icon to send all history via Email
  * MainActivity - Figure out transparency and alpha for button icons.
-    
+ * MainActivity - Add prompt indicated that a data point has been added to history.
+ * MainActivity - Add timer that periodically updates text displays, overriding onSensorChange()
+ * CompassActivity - Place azimuth functionality into a class that may be instantiated.
+ * MainActivity - [BUG] Azimuth/Pressure NOT saved or not displayed in HistoryActivity
+ 
+      

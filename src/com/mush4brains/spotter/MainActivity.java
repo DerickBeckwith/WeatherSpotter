@@ -35,7 +35,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+//Entry point for app
 public class MainActivity extends Activity{
   public static String TAG = "MainActivity";
   public static String FILENAME = "SpotterLog.txt";
@@ -50,8 +50,8 @@ public class MainActivity extends Activity{
   TextView mTextPressure = null;
   TextView mTextCompass = null;
 
-  private float mPressureMillibars;
-  private float mAzimuth;
+//  private float mPressureMillibars;
+//  private float mAzimuth;
   private String mDate;
   private String mTime;
   private Double mLatitude;
@@ -60,7 +60,7 @@ public class MainActivity extends Activity{
   MyTimerTask myTask;// = new MyTimerTask();
   Timer myTimer = new Timer();   
   
-  //********************************************************************** Activity Lifecycle Methods
+  //********************************************************************** Activity Life Cycle Methods
   //onClick()
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,16 @@ public class MainActivity extends Activity{
     mTextCompass = (TextView)findViewById(R.id.textViewCompass);
     
     mSensors = new MySensors(this.getBaseContext()); 
+    
+    //start automatic data collection
+    try{
+      myTask = new MyTimerTask();
+      myTimer.schedule(myTask, 1000, 2000);
+    }catch(Exception e){
+      Log.d(TAG, e.getMessage());
+    }finally{      
+    } 
+    
     updateTextViews();
 
   }
@@ -116,7 +126,7 @@ public class MainActivity extends Activity{
   public void saveData(View view){
 
     String dataString = mDate + "\t" + mTime + "\t" + mLatitude + "\t" + mLongitude + "\t" +
-        Float.toString(mPressureMillibars) + "\t" + Float.toString(mAzimuth) + "\n";   
+        Float.toString(mSensors.getPressure()) + "\t" + Double.toString(mSensors.getAzimuth()) + "\n";   
     
         try{
           OutputStreamWriter osw = new OutputStreamWriter(openFileOutput(FILENAME, Context.MODE_APPEND));
@@ -217,7 +227,7 @@ public class MainActivity extends Activity{
     return location;
   }
 
-  //********************************************************************** Utility methods (helps)
+  //********************************************************************** Utility methods (helpers)
   private void updateTextViews(){
     mDate = getDate();
     mTime = getTime();
