@@ -264,7 +264,9 @@ public class MainActivity extends Activity{
     
     if(mSensors.hasCompass()){
       DecimalFormat df = new DecimalFormat("###.0");
-      mTextCompass.setText("Azimuth: " + df.format(mSensors.getAzimuth()));
+      CardinalPoints cp = new CardinalPoints();
+      
+      mTextCompass.setText("Azimuth: " + df.format(mSensors.getAzimuth()) + "  " + cp.getCardinalAbbreviation(mSensors.getAzimuth()));
     }else{
       mTextCompass.setText("No compass");
     }    

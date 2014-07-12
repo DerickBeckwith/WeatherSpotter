@@ -1,5 +1,6 @@
 package com.mush4brains.spotter;
 
+import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -109,8 +110,11 @@ public class CompassActivity extends Activity implements SensorEventListener {
 			double azimuth = Math.toDegrees(matrixValues[0]);
 			double pitch = Math.toDegrees(matrixValues[1]);
 			double roll = Math.toDegrees(matrixValues[2]);
-
-			readingAzimuth.setText("Azimuth: " + Double.toString(azimuth));
+			DecimalFormat df = new DecimalFormat("###.0");
+			CardinalPoints cp = new CardinalPoints();
+			
+			readingAzimuth.setText("Azimuth: " + df.format(azimuth) + "'" + cp.getCardinalAbbreviation(azimuth) + "'");
+			
 			readingPitch.setText("Pitch: " + Double.toString(pitch));
 			readingRoll.setText("Roll: " + Double.toString(roll));
 

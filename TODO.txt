@@ -19,7 +19,8 @@
  * MainActivity - Prompts user for NWS reporting email. Saves preferences.
  * MainActivity - Create class to convert latitude and longitude to locations using API.
  * MainActivity - Construct icons related to weather reporting elements.
- 
+
+  
  //ReportActivity
  * ReportActivity - Create ReportActivity and start from MainActivity
  * ReportActivity - process received bundle of data from MainActivity
@@ -33,6 +34,7 @@
  
  //HistoryActivity 
  * HistoryActivity - Add Message icon to send selected history data point via Message
+ * HistoryActivity - Save history to an external file (SD drive) that may be imported via USB
  
  
  
@@ -49,4 +51,5 @@
  * HistoryActivity - Modify alert dialog for multiuse by passing an int.      
  * HistoryActivity - Display toast if trying to delete history that does not exist.
  * HistoryActivity - Display clicked item in list view (using Toast)  
-  
+ * MainActivity - Display azimuth in text such as N,S,SE,E-SE,W-NW 
+   
