@@ -1,0 +1,200 @@
+//Everything related to files
+
+//NOTE: There is a problem with Android such that when your app creates a folder
+//and files on the external storage device, that they will(may) not be viewable
+//right away with Windows Explorer via USB. The ONLY solution I have learned is
+//to reboot android device. Then, like magic, it becomes viewable to Windows.
+//Naturally, if you browse the folder using an android app you will see the folder
+//and files without a reboot. 
+
+* Get private app path
+      File dir = getFilesDir(); 
+        or
+      File myFile = this.getFilesDir();
+      //e.g. /data/data/com.mush4brains.spotter/files
+    
+* Determine if SD card exists
+	  Boolean isSDPresent = android.os.Environment.getExternalStorageState().equals(
+	              android.os.Environment.MEDIA_MOUNTED);
+	  Log.d(TAG,"SD CARD: " + isSDPresent.toString());
+	  //E.g. SD CARD: true
+    
+	
+* Get external storage location
+	  String root = Environment.getExternalStorageDirectory().toString();
+	  Log.d(TAG,"root: " + root.toString());
+	  //E.g. root: /storage/emulated/0
+	  
+	    or
+	    
+	  String sdcard = Environment.getExternalStorageDirectory().getAbsolutePath();
+      Log.d(TAG,"sdcard: " + sdcard);
+  
+* Get external storage location set aside for your app
+    File externalStorage = new File(Environment.getExternalStorageDirectory(), "Android/data/" + getPackageName());
+    Log.d(TAG,"extstorage:" + externalStorage.toString());
+    //E.g. /storage/emulated/0/Android/data/com.mush4brains.spotter
+    NOTE: This is now accessable from Windows Explorer connected to device via usb
+  
+* Read a file from app private location
+	  public static String FILENAME = "SpotterLog.txt";
+	
+	  InputStream inputStream = openFileInput(FILENAME);
+	  InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+	  BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+	  String receiveString = "";
+	  StringBuilder stringBuilder = new StringBuilder();
+	  while ( (receiveString = bufferedReader.readLine()) != null ) {
+	    stringBuilder.append(receiveString);
+	  }
+	  inputStream.close();
+	  
+	  //stringBuilder contains the file contents
+  
+  * Two methods to verify external storage is readable and writable
+  
+		  /* Checks if external storage is available for read and write */
+		  public boolean isExternalStorageWritable() {
+		      String state = Environment.getExternalStorageState();
+		      if (Environment.MEDIA_MOUNTED.equals(state)) {
+		          return true;
+		      }
+		      return false;
+		  }
+		  
+		  /* Checks if external storage is available to at least read */
+		  public boolean isExternalStorageReadable() {
+		      String state = Environment.getExternalStorageState();
+		      if (Environment.MEDIA_MOUNTED.equals(state) ||
+		          Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+		          return true;
+		      }     
+		      return false;
+		  } 
+ 
+          
+* Code to create a folder on the sdcard and to write a string to a file
+  NOTE: stringBuilder contains file contents (see above)
+
+          //creates folder /sdcard/WeatherSpotter/Files/History
+          File appDir = new File(Environment.getExternalStorageDirectory(),
+              "WeatherSpotter/Files/History");
+ 
+          // Create the storage directory if it does not exist
+          if (!appDir.exists()) {
+            if (!appDir.mkdirs()) {
+              Log.d(TAG, "failed to create directory");        
+            }
+            else{
+              Log.d(TAG,"Success");
+            }
+          }
+          
+          //write file contents if file exists
+          if (appDir.exists()){
+            File outputFile = new File (appDir, FILENAME);
+            FileOutputStream out = new FileOutputStream(outputFile);
+            out.write(stringBuilder.toString().getBytes());
+           
+            out.close();
+          }          
+          
+NOTE: You might not see the above via USB and Windows Explorer due to an Android bug
+//http://stackoverflow.com/questions/7429087/cant-see-a-file-in-windows-written-by-an-android-app-on-sd-card-unless-i-force
+* Work around
+  //Step 1 - Create the folder if required.
+          //creates folder /sdcard/WeatherSpotter/Files/History
+          File appDir = new File(
+              Environment.getExternalStorageDirectory(),
+              "WeatherSpotter/Files/History/");
+              
+          // Create the storage directory if it does not exist
+          if (!appDir.exists()) {
+            if (!appDir.mkdirs()) {
+              Log.d(TAG, "failed to create directory");        
+            }
+            else{
+              Log.d(TAG,"Success");
+            }
+          }
+  //Step 2 - Write the file like normal
+          //write file contents if file exists
+          if (appDir.exists()){
+            String s = " ";
+            File outputFile = new File (appDir, "dummy.txt");
+            FileOutputStream out = new FileOutputStream(outputFile);
+            out.write(s.getBytes());
+            out.flush();
+            out.close();
+          }
+          
+  //Step3 - HERE IS THE BUG FIX...to allow windows explorer to update          
+          MediaScannerConnection.scanFile(this, new String[]{Environment.getExternalStorageDirectory().toString() +
+          "/WeatherSpotter/Files/Reports/dummy.txt"}, null, null);
+          
+          
+* Function to create files on SD card and to implement bug fix
+   
+   //call these two lines to create folders, dummy.txt means nothing but only to fix bug
+   addFileToExternalFolder("/WeatherSpotter/Files/History", "dummy.txt", testString);
+   addFileToExternalFolder("/WeatherSpotter/Files/Reports", "dummy.txt", testString);
+          
+   //writes string to a file         
+   addFileToExternalFolder("/WeatherSpotter/Files/History", FILENAME, stringBuilder.toString());
+   
+  //here is the function
+ //path = suffix on SD card "/WeatherSpotter/Files/Reports"
+ //filename = "SpotterLog.txt
+ //data = [contents of file to write] in a String
+ //******************************************************************************
+  public void addFileToExternalFolder(String path, String filename, String data){    
+    
+     //Step 1 - Create folder
+    File reportDir = new File(
+        Environment.getExternalStorageDirectory(),
+        path);
+    
+    // Create the storage directory if it does not exist
+    if (!reportDir.exists()) {
+      if (!reportDir.mkdirs()) {
+        Log.d(TAG, "failed to create directory");        
+      }
+      else{
+        Log.d(TAG,"Success");
+      }
+    }          
+    
+    //Step 2 - Write file, write file contents if file exists
+    if (reportDir.exists()){
+      try {
+        File outputFile = new File (reportDir, filename);
+        
+        if(!outputFile.exists()){
+          FileOutputStream out;
+          out = new FileOutputStream(outputFile);
+          out.write(data.getBytes());
+          out.flush();
+          out.close();
+        }
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      } catch (IOException e){
+        e.printStackTrace();
+      }
+    }          
+
+    //Step 3 - BUG fix
+    MediaScannerConnection.scanFile(this, new String[]{Environment.getExternalStorageDirectory().toString() +
+        path + "/" + filename}, null, null);
+
+    //Step 4 - Delete dummy.txt
+    if (filename == "dummy.txt"){
+      File file = new File(Environment.getExternalStorageDirectory().toString() + path + "/" + filename);
+      Log.d(TAG,"Path: " + file.getAbsolutePath());
+      boolean deleted = file.delete();
+      Log.d(TAG,"Deleted: " + Boolean.toString(deleted));
+    }
+      
+    
+  }   
+       

@@ -3,9 +3,11 @@ package com.mush4brains.spotter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +18,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,7 +77,6 @@ public class HistoryActivity extends Activity {
     
   }
   
-
   
   //********************************************************************** onClick() button events
   //onclick for email button
@@ -123,13 +127,119 @@ public class HistoryActivity extends Activity {
       
   }
   
+  /* Checks if external storage is available for read and write */
+  public boolean isExternalStorageWritable() {
+      String state = Environment.getExternalStorageState();
+      if (Environment.MEDIA_MOUNTED.equals(state)) {
+          return true;
+      }
+      return false;
+  }
+  
+  /* Checks if external storage is available to at least read */
+  public boolean isExternalStorageReadable() {
+      String state = Environment.getExternalStorageState();
+      if (Environment.MEDIA_MOUNTED.equals(state) ||
+          Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+          return true;
+      }     
+      return false;
+  }  
+  
   //onClick() for Save to SD card
+  //Creates two folders on SD card, adds the log file along with some dummy files. The dummy files
+  //are used by a work around to allow Windows Explorer USB to see changes right away
   public void sendSDCard(View view){
-    File dir = getFilesDir(); 
-    File file = new File(dir, FILENAME);
-    Log.d(TAG,dir.getPath());
-    Log.d(TAG,file.getName());
     
+    try {
+      
+      //load private file contents to StringBuilder stringBuilder
+      InputStream inputStream = openFileInput(FILENAME);
+      InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+      BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+      String receiveString = "";
+      StringBuilder stringBuilder = new StringBuilder();
+      while ( (receiveString = bufferedReader.readLine()) != null ) {
+        stringBuilder.append(receiveString);
+      }
+      inputStream.close();
+
+      //try writing the file contents to a file on external folder
+      try{
+        if(isExternalStorageWritable()){
+          //String testString = " ";
+          addFileToExternalFolder("/WeatherSpotter/Files/History", "dummy.txt", " ");
+          addFileToExternalFolder("/WeatherSpotter/Files/Reports", "dummy.txt", " ");
+          
+          addFileToExternalFolder("/WeatherSpotter/Files/History", FILENAME, stringBuilder.toString());          
+
+        }
+      }catch(Exception e){
+        Log.d(TAG,"Error Save: " + e.getMessage());
+      }        
+      
+      
+    } catch (FileNotFoundException e) {
+      Log.e(TAG, "File not found: " + e.toString());
+    } catch (IOException e) {
+      Log.e(TAG, "Can not read file: " + e.toString());
+    }  
+  }
+  
+  
+ //path = "/WeatherSpotter/Files/Reports"
+ //filename = "SpotterLog.txt
+ //data = [contents of file to write] in a String
+ //******************************************************************************
+  public void addFileToExternalFolder(String path, String filename, String data){    
+    
+    //Step 1 - Create folder
+    File reportDir = new File(
+        Environment.getExternalStorageDirectory(),
+        path);
+    
+    // Create the storage directory if it does not exist
+    if (!reportDir.exists()) {
+      if (!reportDir.mkdirs()) {
+        Log.d(TAG, "failed to create directory");        
+      }
+      else{
+        Log.d(TAG,"Success");
+      }
+    }          
+    
+    //Step 2 - Write file, write file contents if file exists
+    if (reportDir.exists()){
+      try {
+        File outputFile = new File (reportDir, filename);
+        
+        if(!outputFile.exists()){
+          FileOutputStream out;
+          out = new FileOutputStream(outputFile);
+          out.write(data.getBytes());
+          out.flush();
+          out.close();
+        }
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      } catch (IOException e){
+        e.printStackTrace();
+      }
+    }          
+
+    //Step 3 - BUG fix
+    MediaScannerConnection.scanFile(this, new String[]{Environment.getExternalStorageDirectory().toString() +
+        path + "/" + filename}, null, null);
+    
+    //Step 4 - Delete dummy.txt
+    if (filename == "dummy.txt"){
+      File file = new File(Environment.getExternalStorageDirectory().toString() + path + "/" + filename);
+      Log.d(TAG,"Path: " + file.getAbsolutePath());
+      boolean deleted = file.delete();
+      Log.d(TAG,"Deleted: " + Boolean.toString(deleted));
+    }
+      
+
     
   }
   
