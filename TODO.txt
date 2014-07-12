@@ -31,9 +31,9 @@
  * CompassActivity - Display azimuth in decimal value
  * CompassActivity - Display azimuth in text such as N,S,SE,E-SE,W-NW 
  
- //HistoryActivity
- * HistoryActivity - Add 'Are you sure?' alert to user when deleting all history.
+ //HistoryActivity 
  * HistoryActivity - Add Message icon to send selected history data point via Message
+ 
  
  
  //************************************************ COMPLETED List for version v0.2
@@ -45,5 +45,8 @@
  * MainActivity - Add timer that periodically updates text displays, overriding onSensorChange()
  * CompassActivity - Place azimuth functionality into a class that may be instantiated.
  * MainActivity - [BUG] Azimuth/Pressure NOT saved or not displayed in HistoryActivity
- 
-      
+ * HistoryActivity - Add 'Are you sure?' alert to user when deleting all history.
+ * HistoryActivity - Modify alert dialog for multiuse by passing an int.      
+ * HistoryActivity - Display toast if trying to delete history that does not exist.
+ * HistoryActivity - Display clicked item in list view (using Toast)  
+  

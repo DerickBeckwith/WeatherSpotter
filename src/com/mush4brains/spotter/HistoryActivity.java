@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -28,11 +29,20 @@ import android.widget.Toast;
 public class HistoryActivity extends Activity {
   public static String TAG = "HistoryActivity";
   public static String FILENAME = "SpotterLog.txt";
-
+  
+  //used for alert dialog choices
+  final int DELETE_NOTHING = 0;
+  final int DELETE_ALL_HISTORY = 1;
+  
   ArrayAdapter<String> mAdapter;
   ListView mListViewHistory = null;
   Context mContext;
 
+  enum ALERT_CHOICE{
+    NOTHING,
+    DELETE_ALL;
+  }
+  
   //********************************************************************** Activity Life Cycle Methods  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +53,22 @@ public class HistoryActivity extends Activity {
     setTitle("Data Collection History");
     mListViewHistory = (ListView)findViewById(R.id.listViewHistory);
     updateListView();
+    
+    //listview click listener...does nothing for the moment but display selected item
+    mListViewHistory.setClickable(true);
+    mListViewHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position,
+          long id) {
+        // TODO Auto-generated method stub
+        Object o = mListViewHistory.getItemAtPosition(position);
+        String s = (String)o;
+        Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();        
+      }
+    });
+        
+    
   }
   
 
@@ -80,9 +106,15 @@ public class HistoryActivity extends Activity {
   //onclick for DELETE button
   public void deleteFile(View view){
     
+    //return if nothing exists in mAdapter wich feeds listView
+    if (mAdapter.getCount() < 1){
+      Toast.makeText(mContext, "Nothing to delete!", Toast.LENGTH_SHORT).show();
+      return;
+    }
+    
     //generate alert box
     try{
-      showDialog("Delete all History?");
+      showDialog("Delete all History?", DELETE_ALL_HISTORY);
       
     }catch(Exception e){
       Log.d(TAG, e.getMessage());
@@ -92,7 +124,7 @@ public class HistoryActivity extends Activity {
 
   //********************************************************************** Utility methods (helpers)  
  //Alert Dialog prompting user to delete history - called from deleteFile()  
-  public void showDialog(final String alertMessage) throws Exception
+  public void showDialog(final String alertMessage, final int feature) throws Exception
   {
       AlertDialog.Builder builder = new AlertDialog.Builder(HistoryActivity.this);
       builder.setMessage(alertMessage);
@@ -103,20 +135,26 @@ public class HistoryActivity extends Activity {
           @Override
           public void onClick(DialogInterface dialog, int which) 
           {
+             switch(feature){
+             case DELETE_NOTHING: 
+               break;
+             case DELETE_ALL_HISTORY:
              
-             File dir = getFilesDir(); 
-             File file = new File(dir, FILENAME);
-             boolean deleted = file.delete();
-             Log.d(TAG,"Dir: " + dir.toString());
-             Log.d(TAG,"File: " + file.toString());
-             Log.d(TAG, Boolean.toString(deleted));
-  
-             List<String> items = new LinkedList<String>();    
-             String[] values = items.toArray(new String[items.size()]);  
-             
-             //NOTE requires context, therefore I created mContext and set at onCreate()
-             mAdapter = new ArrayAdapter<String>(mContext , android.R.layout.simple_dropdown_item_1line, values);
-             mListViewHistory.setAdapter(mAdapter);  
+               File dir = getFilesDir(); 
+               File file = new File(dir, FILENAME);
+               boolean deleted = file.delete();
+               Log.d(TAG,"Dir: " + dir.toString());
+               Log.d(TAG,"File: " + file.toString());
+               Log.d(TAG, Boolean.toString(deleted));
+    
+               List<String> items = new LinkedList<String>();    
+               String[] values = items.toArray(new String[items.size()]);  
+               
+               //NOTE requires context, therefore I created mContext and set at onCreate()
+               mAdapter = new ArrayAdapter<String>(mContext , android.R.layout.simple_dropdown_item_1line, values);
+               mListViewHistory.setAdapter(mAdapter);
+               break;
+             }
              dialog.dismiss();
           }
       });
@@ -127,6 +165,12 @@ public class HistoryActivity extends Activity {
           @Override
           public void onClick(DialogInterface dialog, int which) 
           {
+            switch(feature){
+            case 0:
+              break;
+            case DELETE_ALL_HISTORY:
+              break;
+            }
             dialog.dismiss();
           }
       });
@@ -146,7 +190,6 @@ public class HistoryActivity extends Activity {
         
         StringBuilder stringBuilder = new StringBuilder();
         while ((receiveString = br.readLine()) != null){
-          int lineNumber = 0;
           String[] dataArray;
           String outputString = "";
           dataArray =receiveString.split("\t");
