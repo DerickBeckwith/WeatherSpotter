@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -121,6 +122,35 @@ public class HistoryActivity extends Activity {
     }
       
   }
+  
+  //onClick() for Save to SD card
+  public void sendSDCard(View view){
+    File dir = getFilesDir(); 
+    File file = new File(dir, FILENAME);
+    Log.d(TAG,dir.getPath());
+    Log.d(TAG,file.getName());
+    
+    
+  }
+  
+//  //Save to external file onClick()
+//  //********************************
+//  @SuppressWarnings("deprecation")
+//  public void saveData(View view){
+//
+//    String dataString = mDate + "\t" + mTime + "\t" + mLatitude + "\t" + mLongitude + "\t" +
+//        Float.toString(mSensors.getPressure()) + "\t" + Double.toString(mSensors.getAzimuth()) + "\n";   
+//    
+//        try{
+//          OutputStreamWriter osw = new OutputStreamWriter(openFileOutput(FILENAME, Context.MODE_APPEND));
+//          osw.write(dataString);
+//          osw.close();
+//          
+//          Toast.makeText(getApplicationContext(), "Data point saved!", Toast.LENGTH_SHORT).show();
+//        }catch(Exception e){
+//          Log.d(TAG,"Error Save: " + e.getMessage());
+//        }    
+//  }  
 
   //********************************************************************** Utility methods (helpers)  
  //Alert Dialog prompting user to delete history - called from deleteFile()  

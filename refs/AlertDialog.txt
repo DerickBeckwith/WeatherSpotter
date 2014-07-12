@@ -1,0 +1,47 @@
+Purpose:Add alert dialog method with YES/NO options.
+
+Code for AndroidManifest.xml
+==============================
+na
+
+Code to go into calling activity
+=================================
+    try{
+      showDialog("Delete all History?");
+    }catch(Exception e){
+      Log.d(TAG, e.getMessage());
+    }
+
+
+Additional code
+=================================
+//NOTE: change class name (e.g. replace HistoryActivity.this)
+  public void showDialog(final String alertMessage) throws Exception
+  {
+      AlertDialog.Builder builder = new AlertDialog.Builder(HistoryActivity.this);
+      builder.setMessage(alertMessage);
+      //builder.setMessage("Ring: " + phone);       
+
+      builder.setPositiveButton("Yes", new OnClickListener()
+      {
+          @Override
+          public void onClick(DialogInterface dialog, int which) 
+          {
+             //do something positive
+             Log.d(TAG,"Positive");
+              dialog.dismiss();
+          }
+      });
+
+      builder.setNegativeButton("No", new OnClickListener() 
+      {   
+          @Override
+          public void onClick(DialogInterface dialog, int which) 
+          {
+            Log.d(TAG,"Negative");
+              dialog.dismiss();
+          }
+      });
+
+      builder.show();
+  }

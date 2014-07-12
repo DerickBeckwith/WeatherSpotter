@@ -30,6 +30,16 @@
                 android:onClick="sendEmail" />
 
             <Button
+                android:id="@+id/buttonSDCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="left"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_save_sdcard_a"
+                android:onClick="sendSDCard" />
+                        
+            <Button
                 android:id="@+id/buttonDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

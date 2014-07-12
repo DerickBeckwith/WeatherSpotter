@@ -1,0 +1,58 @@
+Purpose: Demos use of thread pool
+Ref:http://www.javacodegeeks.com/2013/01/
+  java-thread-pool-example-using-executors-and-threadpoolexecutor.html
+
+Code for AndroidManifest.xml
+==============================
+na
+
+Code to go into calling activity
+=================================
+//associated with button onClick()
+  public void buttonTest(View view){
+    Log.d(TAG,"buttonTest");
+    ExecutorService executor = Executors.newFixedThreadPool(5);
+    for (int i = 0; i < 10; i++){
+      Log.d(TAG,""+i);
+      Runnable worker = new WorkerThread("" + i);
+      executor.execute(worker);
+    }
+      executor.shutdown();
+      while(!executor.isTerminated()){      
+    }
+  }
+
+
+Additional code
+=================================
+//modified for Android
+  public class WorkerThread implements Runnable {
+     private static String TAG = "Runnable";
+      private String command;
+   
+      public WorkerThread(String s){
+          this.command=s;
+      }
+   
+      @Override
+      public void run() {
+        Log.d(TAG,Thread.currentThread().getName()+ " Start. Command = " + command);
+          //System.out.println(Thread.currentThread().getName()+ " Start. Command = " + command);
+          processCommand();
+        Log.d(TAG,  Thread.currentThread().getName()+" End.");          
+        //System.out.println(Thread.currentThread().getName()+" End.");
+      }
+   
+      private void processCommand() {
+          try {
+              Thread.sleep(1000);
+          } catch (InterruptedException e) {
+              e.printStackTrace();
+          }
+      }
+   
+      @Override
+      public String toString(){
+          return this.command;
+      }
+  }

@@ -1,0 +1,79 @@
+Purpose:Demonstrates the use of sensors
+NOTE: Sensor listeners are registered and unregistered in the onResume() and onPause()
+events.
+
+Code for AndroidManifest.xml
+==============================
+na
+
+
+
+Code to go into calling activity
+=================================
+public class MainActivity extends Activity implements SensorEventListener {
+  private SensorManager mSensorManager;
+  private static String TAG = "MainActivity";
+  
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    
+    mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+  }
+  
+  @Override
+  public final void onAccuracyChanged(Sensor sensor, int accuracy) {
+  // Do something here if sensor accuracy changes.
+    
+  }
+  
+  @Override
+  public final void onSensorChanged(SensorEvent event) {
+  
+    Sensor sensor = event.sensor;
+    
+    if (sensor.getType() == Sensor.TYPE_GRAVITY)
+      Log.d(TAG,"Gravity: " + Float.toString(event.values[0]));
+  
+    else if (sensor.getType() == Sensor.TYPE_PRESSURE)
+      Log.d(TAG,"Pressure: " + Float.toString(event.values[0]));
+    
+    else if (sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+      Log.d(TAG,"Acc[XYZ]: " + Float.toString(event.values[0]) + ", " + Float.toString(event.values[1]) + ", " + Float.toString(event.values[2]));
+    
+    else if (sensor.getType() == Sensor.TYPE_GYROSCOPE)
+      Log.d(TAG,"Gyro[XYZ]: " + Float.toString(event.values[0]) + ", " + Float.toString(event.values[1]) + ", " + Float.toString(event.values[2]));
+  
+    else if (sensor.getType() == Sensor.TYPE_LIGHT)
+      Log.d(TAG,"Light: " + Float.toString(event.values[0]));
+  }
+   
+  @Override
+  protected void onResume() {
+    // Register a listener for the sensor.
+    super.onResume();
+   mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY), SensorManager.SENSOR_DELAY_NORMAL);
+   mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE), SensorManager.SENSOR_DELAY_NORMAL);
+   mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+   mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_NORMAL);
+   mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), SensorManager.SENSOR_DELAY_NORMAL); 
+  }
+  
+  @Override
+  protected void onPause() {
+    //Be sure to unregister the sensor when the activity pauses.
+    super.onPause();
+    
+    mSensorManager.unregisterListener(this);
+  }
+
+}
+
+
+
+
+
+Additional code
+=================================
+na

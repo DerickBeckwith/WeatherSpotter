@@ -1,0 +1,47 @@
+//NOTES: Adding images
+//I use two programs because I'm not fast with the 2nd program, or too
+//lazy to become better at it. So this is the 'Lazy Chuck' method.
+
+1. Use Paint.exe (Microsoft) to create graphic. Choose following sizes:
+    24x24 - notifications
+	32x32 - action bar
+	16x16 - contextual
+	48x48 - launcher icon (icon showing on desktop)
+	72x72 - icons for buttons
+
+    Transparency will be added next. Ensure transparent areas are a solid
+    color that is not used within the image (e.g. magenta)
+
+2. Save file. E.g. "ic_72x72_functionName.png"
+
+3. Open same file in Paint.net. (Really easy to add transparency).
+4. Use the 'Wand' tool and select a spot on the transparent color (e.g. magenta).
+5. Delete. This removes all magenta and reveals a checkered background.
+6. Append "_a" to the filename during 'save as'. The "_a" means alpha, or indicates
+   the png file has transparency.
+7. Close the file.
+8. Drag the file into the 'res\drawable-hdpi' folder in the Eclipse project.
+
+9. In Eclipse, select the "res\layout" file that will utilize the image.
+10. For this explanation, the image will be used as an icon and placed on top
+    of a button. Assume the button is named "buttonEmail" and the image is
+    named "ic_72x72_email_a.png". The following XML code is sufficient.
+
+	NOTE the background and drawableTop properties.
+
+
+            <Button
+                android:id="@+id/buttonEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="left"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/ic_72x72_email_a"
+                android:onClick="sendEmail" />
+	
+11. Add the XML code and save the button.
+12. Click the 'Graphical Layout' mode and see the new image in use.
+
+EDITING the image. You can open the original file saved in Windows Explorer and make changes.
+Perform steps 1 through 8 above. That's all.

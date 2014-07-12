@@ -1,0 +1,84 @@
+Purpose: Demos use of Intent to record audio using an sound recording
+app on the device.
+Ref: http://www.grokkingandroid.com/recording-audio-using-androids-mediarecorder-framework/
+
+Code for AndroidManifest.xml
+==============================
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+Code to go into calling activity
+=================================
+public class MainActivity extends Activity {
+ 
+  private static String TAG = "MainActivity";
+  public static int RECORD_REQUEST = 0;
+  
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+  }
+   
+  public void startRecording(View view) {
+    Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+    if (isAvailable(getApplicationContext(), intent)){
+      startActivityForResult(intent, RECORD_REQUEST);
+    }else{
+      Log.d(TAG,"NOT available");
+    } 
+  }
+  
+  protected void onActivityResult(int requestCode,
+    int resultCode, Intent intent) {
+    if (requestCode == RECORD_REQUEST) {
+      if (resultCode == RESULT_OK) {
+        Uri audioUri = intent.getData();
+        Log.d(TAG,audioUri.getPath());
+          
+        // make use of this MediaStore uri
+        // e.g. store it somewhere
+      }
+      else {
+        // react meaningful to problems
+       }
+    }
+    else {
+      super.onActivityResult(requestCode, resultCode, intent);    
+    }
+  }    
+  public static boolean isAvailable(Context ctx, Intent intent) {
+    final PackageManager mgr = ctx.getPackageManager();
+    List<ResolveInfo> list = mgr.queryIntentActivities(intent, 
+                           PackageManager.MATCH_DEFAULT_ONLY);
+    return list.size() > 0;
+  }
+  
+}
+
+Additional code
+=================================
+//activity_main.xml
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${packageName}.${activityClass}" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_world" />
+
+    <Button
+        android:id="@+id/buttonPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/buttonStop"
+        android:layout_below="@+id/buttonStop"
+        android:layout_marginTop="42dp"
+        android:text="Play"
+        android:onClick="playRecording" />
+
+</RelativeLayout>

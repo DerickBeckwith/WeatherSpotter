@@ -1,0 +1,60 @@
+Purpose: Demo of Proximity Sensor
+The prox sensor uses two values. A value < max value is near, otherwise it is far.
+
+Code for AndroidManifest.xml
+==============================
+na
+
+Code to go into calling activity
+=================================
+public class MainActivity extends Activity implements SensorEventListener {
+  private SensorManager mSensorManager;
+  private static String TAG = "MainActivity";
+  
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    
+    mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+  }
+  
+  @Override
+  public final void onAccuracyChanged(Sensor sensor, int accuracy) {
+  // Do something here if sensor accuracy changes.
+    
+  }
+  
+  @Override
+  public final void onSensorChanged(SensorEvent event) {
+  
+    Sensor sensor = event.sensor;
+
+    if (sensor.getType() == Sensor.TYPE_PROXIMITY){
+      if (event.values[0] < sensor.getMaximumRange())
+        Log.d(TAG,"Proximity: Near" + Float.toString(event.values[0]));
+      else 
+        Log.d(TAG,"Proximity: Far " + Float.toString(event.values[0]));      
+    }
+  }
+   
+  @Override
+  protected void onResume() {
+    // Register a listener for the sensor.
+    super.onResume();
+   mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
+  }
+  
+  @Override
+  protected void onPause() {
+    //Be sure to unregister the sensor when the activity pauses.
+    super.onPause();
+    
+    mSensorManager.unregisterListener(this);
+  }
+
+}
+
+Additional code
+=================================
+na

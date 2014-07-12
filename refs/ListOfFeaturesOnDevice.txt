@@ -1,0 +1,35 @@
+Purpose:List of features on active device
+
+
+Code for AndroidManifest.xml
+==============================
+na
+
+
+
+Code to go into calling activity
+=================================
+//add where required
+   PackageManager packageManager = this.getPackageManager();
+    
+    Log.d(TAG, "Camera: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)));
+    Log.d(TAG, "Bluetooth: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)));    
+    Log.d(TAG, "Microphone: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)));    
+    Log.d(TAG, "Accelerometer: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER)));
+    Log.d(TAG, "Barometer: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_BAROMETER)));    
+    Log.d(TAG, "Compass: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_COMPASS)));    
+    Log.d(TAG, "Gyroscope: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_GYROSCOPE)));    
+    Log.d(TAG, "Light: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_LIGHT)));    
+    Log.d(TAG, "Proximity: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_PROXIMITY)));    
+    Log.d(TAG, "Multitouch 2: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN_MULTITOUCH)));  
+    Log.d(TAG, "Multitouch 2 or more: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN_MULTITOUCH_DISTINCT)));  
+    Log.d(TAG, "Wifi: " +  Boolean.toString(packageManager.hasSystemFeature(PackageManager.FEATURE_WIFI)));
+    
+
+
+
+
+
+Additional code
+=================================
+na

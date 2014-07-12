@@ -30,13 +30,22 @@
  
  
  //CompassActivity
- * CompassActivity - Improve graphics
+ * CompassActivity - Display sensor formatted data.
+ 
+ //Compass.java
+ * Compass.java - Replace needled with image.
+ * Compass.java - Add ability to position the center of the compass.
+ * Compass.java - Add ability to scale compass.
  
  //HistoryActivity 
  * HistoryActivity - Add Message icon to send selected history data point via Message
  * HistoryActivity - Save history to an external file (SD drive) that may be imported via USB
  
- 
+ //CameraActivity
+ * CameraActivity - Add camera view.
+ * CameraActivity - Superimpose data on top of camera view.
+ * CameraActivity - Save image with data combined. (Pos, az,date/time,user name,comment)
+ * CameraActivity - Send image with data via email.
  
  //************************************************ COMPLETED List for version v0.2
  * MainActivity - Move 'Delete' History icon and functionality to HistoryActivity.

@@ -1,0 +1,92 @@
+Purpose:
+
+
+Code for AndroidManifest.xml
+==============================
+//        </activity>
+        <service android:name=".BoundService"/>
+//    </application>
+
+
+
+Code to go into calling activity
+=================================
+//1 add data members to main activity
+  BoundService myService;
+  boolean isBound = false;
+
+//2 add to activity onStart/onStop
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		//required for the bound service - date time
+		Intent intent = new Intent(this, BoundService.class);
+		bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		if (myService != null) {
+			unbindService(myConnection);
+		}
+	}
+  
+//3 add to main activity class (put near bottom)
+	//required for bound service
+  private ServiceConnection myConnection = new ServiceConnection(){
+    
+    public void onServiceConnected(ComponentName className, IBinder service){
+      MyLocalBinder binder = (MyLocalBinder) service;
+      myService = binder.getService();
+      isBound = true;
+      Log.d(TAG,"onServiceConnected");
+    }
+    
+    public void onServiceDisconnected(ComponentName arg0){
+      isBound = false;
+    }
+  };	  
+
+//4 this calls upon my service
+String currentTime = myService.getCurrentTime();
+
+
+Additional code
+=================================
+//Create this class
+public class BoundService extends Service{
+  
+  private static String TAG = "BoundService";
+  
+  private final IBinder myBinder = new MyLocalBinder();
+  
+  @Override
+  public IBinder onBind(Intent arg0){    
+    return myBinder;
+  }
+  
+  public class MyLocalBinder extends Binder{
+    BoundService getService(){
+      return BoundService.this;
+    }
+  }  
+  
+  //Add service functions below here
+  public String getCurrentTime(){
+    Log.d(TAG,"getCurrentTime()");
+    SimpleDateFormat dateformat =
+        new SimpleDateFormat("HH:mm:ss MM/dd/yyyy", Locale.US);
+    return (dateformat.format(new Date()));
+  }
+  
+  public String getCurrentDate(){
+    SimpleDateFormat dateformat =
+        new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+    return (dateformat.format(new Date()));    
+  }
+    
+  
+}
