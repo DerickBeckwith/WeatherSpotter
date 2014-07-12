@@ -13,13 +13,15 @@
  
  * MainActivity - Pass basic data to ReportActivity via intent/bundle
  * MainActivity - Collect items as icons are pressed (e.g. cloud, funnel, etc.) 
- * MainActivity - Add basic options.
+ * MainActivity - Add basic option details.
  * MainActivity - Prompts user for his/her name to be used with National Weather Service (NWS).  Saves preferences.
  * MainActivity - Prompts user for NWS reporting phone number. Saves preferences.
  * MainActivity - Prompts user for NWS reporting email. Saves preferences.
  * MainActivity - Create class to convert latitude and longitude to locations using API.
  * MainActivity - Construct icons related to weather reporting elements.
-
+ * MainActivity - Add actionbar to display subtitle
+ * MainActivity - Add basic code to read shared preferences
+ * MainActivity - Add basic code to save shared preferences
   
  //ReportActivity
  * ReportActivity - Create ReportActivity and start from MainActivity
@@ -29,8 +31,6 @@
  
  //CompassActivity
  * CompassActivity - Improve graphics
- * CompassActivity - Display azimuth in decimal value
- * CompassActivity - Display azimuth in text such as N,S,SE,E-SE,W-NW 
  
  //HistoryActivity 
  * HistoryActivity - Add Message icon to send selected history data point via Message
@@ -52,4 +52,7 @@
  * HistoryActivity - Display toast if trying to delete history that does not exist.
  * HistoryActivity - Display clicked item in list view (using Toast)  
  * MainActivity - Display azimuth in text such as N,S,SE,E-SE,W-NW 
-   
+ * CompassActivity - Display azimuth in formatted decimal value
+ * CompassActivity - Display azimuth in text such as N,S,SE,E-SE,W-NW 
+ * MainActivity - Add basic options.
+    

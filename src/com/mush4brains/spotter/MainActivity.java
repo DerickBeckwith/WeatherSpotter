@@ -16,10 +16,17 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -29,6 +36,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -67,7 +77,27 @@ public class MainActivity extends Activity{
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     
+    //add title
     setTitle("Weather Spotter Reporter - v0.1");
+
+    //adds actionbar
+    ActionBar actionBar = this.getActionBar();
+    actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0000ff")));
+    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+    String dateString = formatter.format(new Date());
+    actionBar.setSubtitle( dateString);
+    
+//    read grab shared preferences
+//    SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+//    Editor editor = pref.edit();
+//    long value = pref.getLong("lastsyncdate", 0);    
+//    write pref
+//    SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+//    Editor editor = pref.edit();
+//    Date date = new Date(System.currentTimeMillis());
+//    long value = date.getTime();
+//    editor.putLong("lastsyncdate", value);
+//    editor.commit();      
     
     //assign all views
     mTextHeader = (TextView)findViewById(R.id.textHeader);
@@ -107,6 +137,43 @@ public class MainActivity extends Activity{
     super.onPause();
     mSensors.unregister();
   }    
+  
+  //************************************************************************ Options menu
+  //displays option menu
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    MenuInflater menuInflater = getMenuInflater();
+    menuInflater.inflate(R.menu.spotter_menu, menu);
+    return true;
+  } 
+
+  //manages option menu selection
+//  @Override
+//   public boolean onOptionsItemSelected(MenuItem item){
+//    switch(item.getItemId()){
+//    
+//    //============================== ACTION DLETE ALL LINKS MENU OPTION
+//    case R.id.action_delete:
+//      return true;
+//    //=============================== ACTION SYNC MENU OPTION
+//    case R.id.action_sync:
+//       return true;
+//    //============================== ACTION IMPORT FILE MENU OPTION
+//    case R.id.action_import:
+//       return true;
+//    //=============================== ACTION EXPORT FILE MENU OPTION
+//    case R.id.action_export:
+//      return true;      
+//      return true;
+//    case R.id.action_about:
+//      return true;
+//    default:
+//      return super.onOptionsItemSelected(item);
+//    }
+//    
+//  }  
+//  
   
   //********************************************************************** onClick() button events
   //Update onClick()

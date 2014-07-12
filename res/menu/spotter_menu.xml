@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+  <item android:id="@+id/groupContact"
+        android:title="Contact Info">
+     <menu>
+	    <item android:id="@+id/menu_user_name"
+	          android:title="User Name" />
+	 
+	    <item android:id="@+id/menu_nws_phonenumber"
+	          android:title="NWS Phone Number" />
+	    
+	    <item android:id="@+id/menu_nws_email"
+	          android:title="NWS Email Address" />
+    </menu>
+  </item>
+  
+  <item android:id="@+id/groupSettings"
+        android:title="Settings">
+      <menu>
+	    <item android:id="@+id/menu_data_interval"
+	          android:title="Data Sample Interval" />
+	 
+	    <item android:id="@+id/menu_auto_save"
+	          android:title="Data Auto Save" />
+    </menu>
+  </item>
+  
+</menu>
