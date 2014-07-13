@@ -13,7 +13,6 @@
  
  * MainActivity - Pass basic data to ReportActivity via intent/bundle
  * MainActivity - Collect items as icons are pressed (e.g. cloud, funnel, etc.) 
- * MainActivity - Add basic option details.
  * MainActivity - Prompts user for his/her name to be used with National Weather Service (NWS).  Saves preferences.
  * MainActivity - Prompts user for NWS reporting phone number. Saves preferences.
  * MainActivity - Prompts user for NWS reporting email. Saves preferences.
@@ -22,6 +21,7 @@
  * MainActivity - Add actionbar to display subtitle
  * MainActivity - Add basic code to read shared preferences
  * MainActivity - Add basic code to save shared preferences
+ * MainActivity - Set portrait orientation mode as only choice.
   
  //ReportActivity
  * ReportActivity - Create ReportActivity and start from MainActivity
@@ -39,8 +39,7 @@
  
  //HistoryActivity 
  * HistoryActivity - Add Message icon to send selected history data point via Message
- * HistoryActivity - Save history to an external file (SD drive) that may be imported via USB
- 
+  
  //CameraActivity
  * CameraActivity - Add camera view.
  * CameraActivity - Superimpose data on top of camera view.
@@ -64,4 +63,6 @@
  * CompassActivity - Display azimuth in formatted decimal value
  * CompassActivity - Display azimuth in text such as N,S,SE,E-SE,W-NW 
  * MainActivity - Add basic options.
+ * MainActivity - Add basic option details to control sampling intervals.
+* HistoryActivity - Save history to an external file (SD drive) that may be imported via USB
     

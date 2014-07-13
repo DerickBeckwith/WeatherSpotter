@@ -151,7 +151,7 @@ public class HistoryActivity extends Activity {
       //build output filename appending date
       String outputFilename = getDateWithSpaces() + "__" +getTimeWithSpaces() + "_" + FILENAME;
       
-      //try writing the file contents to a file on external folder
+      //try writing the file conte nts to a file on external folder
       try{
         if (mFileUtility.isExternalStorageWritable()){
           mFileUtility.addFileToExternalFolder("/WeatherSpotter/Files/History", outputFilename, stringBuilder.toString());

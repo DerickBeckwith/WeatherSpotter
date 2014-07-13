@@ -2,27 +2,36 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
   <item android:id="@+id/groupContact"
         android:title="Contact Info">
-     <menu>
+
 	    <item android:id="@+id/menu_user_name"
-	          android:title="User Name" />
-	 
+	          android:title="User Name" />	 
 	    <item android:id="@+id/menu_nws_phonenumber"
-	          android:title="NWS Phone Number" />
-	    
+	          android:title="NWS Phone Number" />	    
 	    <item android:id="@+id/menu_nws_email"
 	          android:title="NWS Email Address" />
-    </menu>
+	    
+        <item android:id="@+id/groupInterval"
+              android:title="Data Sample Interval"           >
+	        <menu>    
+	            <group android:checkableBehavior="single">   
+	    	    <item android:id="@+id/menu_data_interval_manual"
+	    	          android:title="Manual"/>
+	    	    <item android:id="@+id/menu_data_interval_2sec"
+	    	          android:title="2 secs" />
+	    	    <item android:id="@+id/menu_data_interval_5sec"
+	    	          android:title="5 secs" />
+	    	    <item android:id="@+id/menu_data_interval_15sec"
+	    	          android:title="15 secs" />
+	    	    <item android:id="@+id/menu_data_interval_30sec"
+	    	          android:title="30 secs" />
+	    	    <item android:id="@+id/menu_data_interval_1min"
+	    	          android:title="1 min" />
+	    	    <item android:id="@+id/menu_data_interval_5min"
+	    	          android:title="5 mins" />
+	    	    <item android:id="@+id/menu_data_interval_15min"
+	    	          android:title="15 mins" />
+	    	    </group>
+	        </menu>
+        </item>
   </item>
-  
-  <item android:id="@+id/groupSettings"
-        android:title="Settings">
-      <menu>
-	    <item android:id="@+id/menu_data_interval"
-	          android:title="Data Sample Interval" />
-	 
-	    <item android:id="@+id/menu_auto_save"
-	          android:title="Data Auto Save" />
-    </menu>
-  </item>
-  
 </menu>

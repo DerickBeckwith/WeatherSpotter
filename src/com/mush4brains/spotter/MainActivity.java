@@ -67,6 +67,7 @@ public class MainActivity extends Activity{
  
   MyTimerTask myTask;// = new MyTimerTask();
   Timer myTimer = new Timer();   
+  MenuItem menuDataManual;
   
   //********************************************************************** Activity Life Cycle Methods
   //onClick()
@@ -113,14 +114,14 @@ public class MainActivity extends Activity{
     
     mSensors = new MySensors(this.getBaseContext()); 
     
-    //start automatic data collection at fixed intervals
-    try{
-      myTask = new MyTimerTask();
-      myTimer.schedule(myTask, 1000, 2000);
-    }catch(Exception e){
-      Log.d(TAG, e.getMessage());
-    }finally{      
-    } 
+//    //start automatic data collection at fixed intervals
+//    try{
+//      myTask = new MyTimerTask();
+//      myTimer.schedule(myTask, 1000, 2000);
+//    }catch(Exception e){
+//      Log.d(TAG, e.getMessage());
+//    }finally{      
+//    } 
     
     updateTextViews();
 
@@ -148,35 +149,65 @@ public class MainActivity extends Activity{
     // Inflate the menu; this adds items to the action bar if it is present.
     MenuInflater menuInflater = getMenuInflater();
     menuInflater.inflate(R.menu.spotter_menu, menu);
+    
+    //set Manual interval as default
+    menuDataManual = menu.findItem(R.id.menu_data_interval_manual);    
+    menuDataManual.setChecked(true);
     return true;
   } 
-
+    
+  
   //manages option menu selection
-//  @Override
-//   public boolean onOptionsItemSelected(MenuItem item){
-//    switch(item.getItemId()){
-//    
-//    //============================== ACTION DLETE ALL LINKS MENU OPTION
-//    case R.id.action_delete:
-//      return true;
-//    //=============================== ACTION SYNC MENU OPTION
-//    case R.id.action_sync:
-//       return true;
-//    //============================== ACTION IMPORT FILE MENU OPTION
-//    case R.id.action_import:
-//       return true;
-//    //=============================== ACTION EXPORT FILE MENU OPTION
-//    case R.id.action_export:
-//      return true;      
-//      return true;
-//    case R.id.action_about:
-//      return true;
-//    default:
-//      return super.onOptionsItemSelected(item);
-//    }
-//    
-//  }  
-//  
+  @Override
+   public boolean onOptionsItemSelected(MenuItem item){
+    
+      //this affects only time intervals
+      if(item.isChecked())
+        item.setChecked(false);
+      else
+        item.setChecked(true);
+
+      //responds to specific option choices
+      switch(item.getItemId()){
+      case R.id.menu_user_name:
+        return true;
+      
+      case R.id.menu_nws_phonenumber:
+         return true;
+      
+      case R.id.menu_nws_email:
+         return true;
+      
+      case R.id.menu_data_interval_manual: 
+          changeDataInterval(0);
+          return true;
+      case R.id.menu_data_interval_2sec:
+          changeDataInterval(2000);
+          return true;
+      case R.id.menu_data_interval_5sec:
+          changeDataInterval(5000);
+          return true;
+      case R.id.menu_data_interval_15sec:
+          changeDataInterval(15000);
+          return true;
+      case R.id.menu_data_interval_30sec:
+          changeDataInterval(30000);
+          return true;
+      case R.id.menu_data_interval_1min:
+          changeDataInterval(60000);
+          return true;
+      case R.id.menu_data_interval_5min:
+          changeDataInterval(300000);
+          return true;
+      case R.id.menu_data_interval_15min:
+          changeDataInterval(900000);
+          return true;
+      default:
+          return super.onOptionsItemSelected(item);
+      }
+    
+  }  
+  
   
   //********************************************************************** onClick() button events
   //Update onClick()
@@ -366,6 +397,24 @@ public class MainActivity extends Activity{
 	    }
 	  }  
 
+	  //called from option buttons
+	  public void changeDataInterval(long interval){
+      try{
+        myTask.cancel();
+      }catch(Exception e){
+      }
+      
+      //an interval of time enters manual mode
+      if (interval == 0)
+        return;
+      
+      try{
+        myTask = new MyTimerTask();
+        myTimer.schedule(myTask, 1000, interval);
+      }catch(Exception e){
+      }     	    
+	  }
+	  
 	  public void onResetButtonClick(View view){
 	    myTask.cancel();
 	  }
