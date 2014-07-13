@@ -60,8 +60,6 @@ public class MainActivity extends Activity{
   TextView mTextPressure = null;
   TextView mTextCompass = null;
 
-//  private float mPressureMillibars;
-//  private float mAzimuth;
   private String mDate;
   private String mTime;
   private Double mLatitude;
@@ -76,6 +74,11 @@ public class MainActivity extends Activity{
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    //create default folders if not already existent
+    FileUtility fileUtility = new FileUtility(this.getBaseContext());
+    fileUtility.createAppExternalFolder("/WeatherSpotter/Files/History");
+    fileUtility.createAppExternalFolder("/WeatherSpotter/Files/Reports");
     
     //add title
     setTitle("Weather Spotter Reporter - v0.1");
@@ -110,7 +113,7 @@ public class MainActivity extends Activity{
     
     mSensors = new MySensors(this.getBaseContext()); 
     
-    //start automatic data collection
+    //start automatic data collection at fixed intervals
     try{
       myTask = new MyTimerTask();
       myTimer.schedule(myTask, 1000, 2000);
@@ -339,6 +342,8 @@ public class MainActivity extends Activity{
     }    
   }    
 
+  
+  
 	//******************************************************************* SCHEDULER - TIMED
 	 public void onStartButtonClick(View view){
 	    try{

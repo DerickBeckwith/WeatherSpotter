@@ -9,8 +9,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -43,7 +46,8 @@ public class HistoryActivity extends Activity {
   ArrayAdapter<String> mAdapter;
   ListView mListViewHistory = null;
   Context mContext;
-
+  FileUtility mFileUtility;
+  
   enum ALERT_CHOICE{
     NOTHING,
     DELETE_ALL;
@@ -59,6 +63,7 @@ public class HistoryActivity extends Activity {
     setTitle("Data Collection History");
     mListViewHistory = (ListView)findViewById(R.id.listViewHistory);
     updateListView();
+    mFileUtility = new FileUtility(this.getBaseContext());
     
     //listview click listener...does nothing for the moment but display selected item
     mListViewHistory.setClickable(true);
@@ -127,28 +132,7 @@ public class HistoryActivity extends Activity {
       
   }
   
-  /* Checks if external storage is available for read and write */
-  public boolean isExternalStorageWritable() {
-      String state = Environment.getExternalStorageState();
-      if (Environment.MEDIA_MOUNTED.equals(state)) {
-          return true;
-      }
-      return false;
-  }
-  
-  /* Checks if external storage is available to at least read */
-  public boolean isExternalStorageReadable() {
-      String state = Environment.getExternalStorageState();
-      if (Environment.MEDIA_MOUNTED.equals(state) ||
-          Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-          return true;
-      }     
-      return false;
-  }  
-  
   //onClick() for Save to SD card
-  //Creates two folders on SD card, adds the log file along with some dummy files. The dummy files
-  //are used by a work around to allow Windows Explorer USB to see changes right away
   public void sendSDCard(View view){
     
     try {
@@ -160,110 +144,32 @@ public class HistoryActivity extends Activity {
       String receiveString = "";
       StringBuilder stringBuilder = new StringBuilder();
       while ( (receiveString = bufferedReader.readLine()) != null ) {
-        stringBuilder.append(receiveString);
+        stringBuilder.append(receiveString + "\n");
       }
       inputStream.close();
 
+      //build output filename appending date
+      String outputFilename = getDateWithSpaces() + "__" +getTimeWithSpaces() + "_" + FILENAME;
+      
       //try writing the file contents to a file on external folder
       try{
-        if(isExternalStorageWritable()){
-          //String testString = " ";
-          addFileToExternalFolder("/WeatherSpotter/Files/History", "dummy.txt", " ");
-          addFileToExternalFolder("/WeatherSpotter/Files/Reports", "dummy.txt", " ");
-          
-          addFileToExternalFolder("/WeatherSpotter/Files/History", FILENAME, stringBuilder.toString());          
-
+        if (mFileUtility.isExternalStorageWritable()){
+          mFileUtility.addFileToExternalFolder("/WeatherSpotter/Files/History", outputFilename, stringBuilder.toString());
+          Toast.makeText(mContext, "Data exported \n" + outputFilename, Toast.LENGTH_SHORT).show();
         }
       }catch(Exception e){
         Log.d(TAG,"Error Save: " + e.getMessage());
-      }        
-      
-      
+      }       
+            
     } catch (FileNotFoundException e) {
       Log.e(TAG, "File not found: " + e.toString());
     } catch (IOException e) {
       Log.e(TAG, "Can not read file: " + e.toString());
     }  
   }
-  
-  
- //path = "/WeatherSpotter/Files/Reports"
- //filename = "SpotterLog.txt
- //data = [contents of file to write] in a String
- //******************************************************************************
-  public void addFileToExternalFolder(String path, String filename, String data){    
-    
-    //Step 1 - Create folder
-    File reportDir = new File(
-        Environment.getExternalStorageDirectory(),
-        path);
-    
-    // Create the storage directory if it does not exist
-    if (!reportDir.exists()) {
-      if (!reportDir.mkdirs()) {
-        Log.d(TAG, "failed to create directory");        
-      }
-      else{
-        Log.d(TAG,"Success");
-      }
-    }          
-    
-    //Step 2 - Write file, write file contents if file exists
-    if (reportDir.exists()){
-      try {
-        File outputFile = new File (reportDir, filename);
-        
-        if(!outputFile.exists()){
-          FileOutputStream out;
-          out = new FileOutputStream(outputFile);
-          out.write(data.getBytes());
-          out.flush();
-          out.close();
-        }
-      } catch (FileNotFoundException e) {
-        e.printStackTrace();
-      } catch (IOException e){
-        e.printStackTrace();
-      }
-    }          
-
-    //Step 3 - BUG fix
-    MediaScannerConnection.scanFile(this, new String[]{Environment.getExternalStorageDirectory().toString() +
-        path + "/" + filename}, null, null);
-    
-    //Step 4 - Delete dummy.txt
-    if (filename == "dummy.txt"){
-      File file = new File(Environment.getExternalStorageDirectory().toString() + path + "/" + filename);
-      Log.d(TAG,"Path: " + file.getAbsolutePath());
-      boolean deleted = file.delete();
-      Log.d(TAG,"Deleted: " + Boolean.toString(deleted));
-    }
-      
-
-    
-  }
-  
-//  //Save to external file onClick()
-//  //********************************
-//  @SuppressWarnings("deprecation")
-//  public void saveData(View view){
-//
-//    String dataString = mDate + "\t" + mTime + "\t" + mLatitude + "\t" + mLongitude + "\t" +
-//        Float.toString(mSensors.getPressure()) + "\t" + Double.toString(mSensors.getAzimuth()) + "\n";   
-//    
-//        try{
-//          OutputStreamWriter osw = new OutputStreamWriter(openFileOutput(FILENAME, Context.MODE_APPEND));
-//          osw.write(dataString);
-//          osw.close();
-//          
-//          Toast.makeText(getApplicationContext(), "Data point saved!", Toast.LENGTH_SHORT).show();
-//        }catch(Exception e){
-//          Log.d(TAG,"Error Save: " + e.getMessage());
-//        }    
-//  }  
 
   //********************************************************************** Utility methods (helpers)  
- //Alert Dialog prompting user to delete history - called from deleteFile()  
+  //Alert Dialog prompting user to delete history - called from deleteFile()  
   public void showDialog(final String alertMessage, final int feature) throws Exception
   {
       AlertDialog.Builder builder = new AlertDialog.Builder(HistoryActivity.this);
@@ -316,6 +222,23 @@ public class HistoryActivity extends Activity {
       });
 
       builder.show();
+  }
+  
+  // Date and Time Getters (With Spaces)
+  //returns date
+  private String getDateWithSpaces(){
+    String text = null;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd",Locale.US);
+    text = (dateFormat.format(new Date())).toString();    
+    return text;    
+  }
+  
+  //returns time
+  private String getTimeWithSpaces(){
+    String text = null;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("HH_mm_ss",Locale.US);
+    text = (dateFormat.format(new Date())).toString();
+    return text;
   }
   
   //loads historical data from FILENAME into list view
