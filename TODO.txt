@@ -26,7 +26,7 @@
  * MainActivity - Add actionbar to display subtitle
  * MainActivity - Add basic code to read shared preferences
  * MainActivity - Add basic code to save shared preferences
- * MainActivity - Move and test sensor register/unregister to onStart and onStop
+
   
  //ReportActivity
  * ReportActivity - Create ReportActivity and start from MainActivity
@@ -36,6 +36,8 @@
  
  //CompassActivity
  * CompassActivity - Display sensor formatted data.
+ 
+ //MySensors
  
  //Compass.java
  * Compass.java - Replace needled with image.
@@ -71,4 +73,7 @@
  * MainActivity - Add basic option details to control sampling intervals.
  * HistoryActivity - Save history to an external file (SD drive) that may be imported via USB
  * MainActivity - Set portrait orientation mode as only choice.
+ * MySensors - Add low pass filter.
+ * MySensors - Replace negative azimuth with positive value ranging 0 to 360 degress.
+ * MainActivity - Move and test sensor register/unregister to onStart and onStop
      

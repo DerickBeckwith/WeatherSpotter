@@ -1,8 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    tools:context="${packageName}.${activityClass}" >
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -11,161 +11,185 @@
         android:layout_below="@+id/textHeader"
         android:layout_centerHorizontal="true"
         android:orientation="vertical" >
+ 		<GridLayout
+ 		    android:id="@+id/gridData"
+ 		    android:layout_width="wrap_content"
+ 		    android:layout_height="49dp"
+ 		    android:columnCount="1"
+ 		    android:horizontalSpacing="50dp"
+ 		    android:rowCount="6"
+ 		    android:verticalSpacing="10dp" >
 
-        <GridLayout
-            android:id="@+id/gridControls"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:columnCount="4"
-            android:rowCount="1" >
+ 		    <TextView
+ 		        android:id="@+id/textViewDate"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_column="0"
+ 		        android:layout_gravity="left"
+ 		        android:layout_row="0"
+ 		        android:text="TextView"
+ 		        android:textSize="@dimen/textViewFontSize" />
 
-            <Button
-                android:id="@+id/buttonUpdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_gravity="left"
-                android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_check_a"
-                android:onClick="onStartButtonClick" />
+ 		    <TextView
+ 		        android:id="@+id/textViewTime"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_column="0"
+ 		        android:layout_gravity="left"
+ 		        android:layout_marginLeft="50dp"
+ 		        android:layout_row="1"
+ 		        android:text="TextView"
+ 		        android:textSize="@dimen/textViewFontSize" />
 
-            <Button
-                android:id="@+id/buttonSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linearLayout1"
-                android:layout_gravity="left"
-                android:layout_toRightOf="@+id/buttonUpdate"
-                android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_save_a"
-                android:onClick="saveData" />
+ 		    <TextView
+ 		        android:id="@+id/textViewPressure"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_column="0"
+ 		        android:layout_gravity="left"
+ 		        android:layout_row="2"
+ 		        android:text="TextView"
+ 		        android:textSize="@dimen/textViewFontSize" />
 
-            <Button
-                android:id="@+id/buttonHistory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="2"
-                android:layout_gravity="left|top"
-                android:layout_row="0"
-                android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_history_a"
-                android:onClick="gotoHistory" />
+ 		    <TextView
+ 		        android:id="@+id/textViewCompass"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_column="0"
+ 		        android:layout_gravity="left"
+ 		        android:layout_marginLeft="50dp"
+ 		        android:layout_row="3"
+ 		        android:text="TextView"
+ 		        android:textSize="@dimen/textViewFontSize" />
 
-            <Button
-                android:id="@+id/buttonCompass"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_compass_a"
-                android:onClick="showCompass" />
+ 		    <TextView
+ 		        android:id="@+id/textViewLatitude"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_column="0"
+ 		        android:layout_gravity="left"
+ 		        android:layout_row="4"
+ 		        android:text="TextView"
+ 		        android:textSize="@dimen/textViewFontSize" />
 
-        </GridLayout>
+ 		    <TextView
+ 		        android:id="@+id/textViewLongitude"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_column="0"
+ 		        android:layout_gravity="left"
+ 		        android:layout_marginLeft="50dp"
+ 		        android:layout_row="5"
+ 		        android:text="TextView"
+ 		        android:textSize="@dimen/textViewFontSize" />
 
-        <GridLayout
-            android:id="@+id/gridData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:horizontalSpacing="50dp"
-            android:rowCount="3"
-            android:verticalSpacing="10dp" >
+ 		</GridLayout>
+ 		
+ 		<GridLayout
+ 		    android:id="@+id/gridControls"
+ 		    android:layout_width="wrap_content"
+ 		    android:layout_height="49dp"
+ 		    android:columnCount="5"
+ 		    android:rowCount="1" >
 
-            <TextView
-                android:id="@+id/textViewDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_row="0"
-                android:textSize="@dimen/textViewFontSize"
-                android:text="TextView" />
+ 		    <Button
+ 		        android:id="@+id/buttonUpdate"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_alignParentLeft="true"
+ 		        android:layout_column="0"
+ 		        android:layout_gravity="left"
+ 		        android:background="@android:color/transparent"
+ 		        android:drawableTop="@drawable/ic_72x72_check_a"
+ 		        android:onClick="onStartButtonClick" />
 
-            <TextView
-                android:id="@+id/textViewTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_marginLeft="50dp"
-                android:layout_row="0"
-                android:textSize="@dimen/textViewFontSize"
-                android:text="TextView" />
+ 		    <Button
+ 		        android:id="@+id/buttonSave"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_column="1"
+ 		        android:layout_gravity="left"
+ 		        android:layout_toRightOf="@+id/buttonUpdate"
+ 		        android:background="@android:color/transparent"
+ 		        android:drawableTop="@drawable/ic_72x72_save_a"
+ 		        android:onClick="saveData" />
 
-            <TextView
-                android:id="@+id/textViewPressure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_row="1"
-                android:textSize="@dimen/textViewFontSize"
-                android:text="TextView" />
+ 		    <Button
+ 		        android:id="@+id/buttonHistory"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_column="2"
+ 		        android:layout_gravity="left"
+ 		        android:layout_row="0"
+ 		        android:background="@android:color/transparent"
+ 		        android:drawableTop="@drawable/ic_72x72_history_a"
+ 		        android:onClick="gotoHistory" />
 
-            <TextView
-                android:id="@+id/textViewLatitude"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_row="2"
-                android:textSize="@dimen/textViewFontSize"
-                android:text="TextView" />
+ 		    <Button
+ 		        android:id="@+id/buttonCompass"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_column="3"
+ 		        android:layout_gravity="left"
+ 		        android:background="@android:color/transparent"
+ 		        android:drawableTop="@drawable/ic_72x72_compass_a"
+ 		        android:onClick="showCompass" />
 
-            <TextView
-                android:id="@+id/textViewLongitude"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_marginLeft="50dp"
-                android:layout_row="2"
-                android:textSize="@dimen/textViewFontSize"
-                android:text="TextView" />
+ 		    <Button
+ 		        android:id="@+id/buttonCamera"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_column="4"
+ 		        android:layout_gravity="left"
+ 		        android:layout_row="0"
+ 		        android:onClick="showCamera"
+ 		        android:text="Cam" />
+ 		</GridLayout>
 
-            <TextView
-                android:id="@+id/textViewCompass"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_marginLeft="50dp"
-                android:layout_row="1"
-                android:textSize="@dimen/textViewFontSize"
-                android:text="TextView" />
+ 		<GridLayout
+ 		    android:id="@+id/gridIcons"
+ 		    android:layout_width="wrap_content"
+ 		    android:layout_height="50dp"
+ 		    android:columnCount="4"
+ 		    android:rowCount="4" >
 
-        </GridLayout>
+ 		    <Button
+ 		        android:id="@+id/buttonCloud"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_gravity="left"
+ 		        android:alpha="1.0"
+ 		        android:background="@android:color/transparent"
+ 		        android:drawableTop="@drawable/ic_72x72_cloud_a"
+ 		        android:onClick="processCloud" />
 
-        <GridLayout
-            android:id="@+id/gridIcons"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_below="@+id/buttonSave"
-            android:columnCount="4"
-            android:rowCount="4" >
+ 		    <Button
+ 		        android:id="@+id/buttonFunnel"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_gravity="left"
+ 		        android:background="@android:color/transparent"
+ 		        android:drawableTop="@drawable/ic_72x72_cloud_funnel_a"
+ 		        android:onClick="processFunnel" />
 
-            <Button
-                android:id="@+id/buttonCloud"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:background="@android:color/transparent"
-                android:alpha="1.0"
-                android:drawableTop="@drawable/ic_72x72_cloud_a"
-                android:onClick="processCloud" />
+ 		    <Button
+ 		        android:id="@+id/buttonTornado"
+ 		        android:layout_width="wrap_content"
+ 		        android:layout_height="wrap_content"
+ 		        android:layout_gravity="left"
+ 		        android:background="@android:color/transparent"
+ 		        android:drawableTop="@drawable/ic_72x72_cloud_tornado_a_72"
+ 		        android:onClick="processTornado" />
+ 		</GridLayout>
 
-            <Button
-                android:id="@+id/buttonFunnel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_cloud_funnel_a"
-                android:onClick="processFunnel" />
 
-            <Button
-                android:id="@+id/buttonTornado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_cloud_tornado_a_72"
-                android:onClick="processTornado" />
-        </GridLayout>
+
+ 		<ImageView
+ 		    android:id="@+id/imageViewCamera"
+ 		    android:layout_width="wrap_content"
+ 		    android:layout_height="wrap_content"
+ 		    android:src="@drawable/ic_launcher" />
+    
     </LinearLayout>
 
-</RelativeLayout>
+</FrameLayout>

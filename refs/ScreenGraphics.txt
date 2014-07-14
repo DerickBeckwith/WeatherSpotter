@@ -1,0 +1,16 @@
+Purpose: Screen functions.
+
+//http://stackoverflow.com/questions/1016896/how-to-get-screen-dimensions
+
+1. Get screen dimensions.
+    Display display = getWindowManager().getDefaultDisplay();
+    Point size = new Point();
+    display.getSize(size);
+    int width = size.x;
+    int height = size.y;
+    
+2. Set imageview to cover screen.
+    LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width, height);
+    mImageView.setLayoutParams(parms);  
+
+    

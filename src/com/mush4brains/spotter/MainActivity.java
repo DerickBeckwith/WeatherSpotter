@@ -25,7 +25,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -36,11 +38,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,12 +64,16 @@ public class MainActivity extends Activity{
   TextView mTextLong = null;
   TextView mTextPressure = null;
   TextView mTextCompass = null;
-
+  ImageView mImageView = null;
+  Bitmap mThumbnail = null;
+  
+  
   private String mDate;
   private String mTime;
   private Double mLatitude;
   private Double mLongitude;
- 
+  final int CAMERA_PIC_REQUEST = 1337;  
+  
   MyTimerTask myTask;// = new MyTimerTask();
   Timer myTimer = new Timer();   
   MenuItem menuDataManual;
@@ -103,6 +112,7 @@ public class MainActivity extends Activity{
 //    editor.putLong("lastsyncdate", value);
 //    editor.commit();      
     
+    
     //assign all views
     mTextHeader = (TextView)findViewById(R.id.textHeader);
     mTextDate = (TextView)findViewById(R.id.textViewDate);
@@ -111,9 +121,27 @@ public class MainActivity extends Activity{
     mTextLong = (TextView)findViewById(R.id.textViewLongitude);
     mTextPressure = (TextView)findViewById(R.id.textViewPressure);
     mTextCompass = (TextView)findViewById(R.id.textViewCompass);
+    mImageView = (ImageView) findViewById(R.id.imageViewCamera);
+
+    //setContentView(R.id.main);    
+    Display display = getWindowManager().getDefaultDisplay();
+    Point size = new Point();
+    display.getSize(size);
+    Log.d(TAG,"Size: " + Integer.toString(size.x) + ", " + Integer.toString(size.y));
+    int width = size.x * 50/100;
+    int height = size.y * 50/100;
+    //width = 360;
+    //height = 640;
+    LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width, height);
+    mImageView.setLayoutParams(parms);
+    mImageView.setX((size.x - width)/2);
+    mImageView.setY(20);
+    
+    
+   // mImageView.se
     
     mSensors = new MySensors(this.getBaseContext()); 
-    
+
     updateTextViews();
 
   }
@@ -121,18 +149,36 @@ public class MainActivity extends Activity{
   //onResume()
   @Override
   protected void onResume() {
-    // Register a listener for the sensor.
     super.onResume();
-    mSensors.register();
+    if (mImageView != null)
+      mImageView.setImageBitmap(mThumbnail);
+    
+    Log.d(TAG,"onResume");
   }
 
   //onPause()
   @Override
   protected void onPause() {
+    Log.d(TAG,"onPause");
     super.onPause();
-    mSensors.unregister();
   }    
   
+  @Override
+  protected void onStart(){
+    // Register a listener for the sensor.    
+    super.onStart();
+    mSensors.register();
+    Log.d(TAG,"onStart");
+    
+  }
+  
+  @Override
+  protected void onStop(){
+    
+    mSensors.unregister();
+    Log.d(TAG,"onStop");
+    super.onStop();
+  }
   //************************************************************************ Options menu
   //displays option menu
   @Override
@@ -199,6 +245,24 @@ public class MainActivity extends Activity{
     
   }  
   
+  //********************************************************************* onActivityResult
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    
+    if(resultCode == RESULT_OK){
+      if (requestCode == 1337){
+        mThumbnail = (Bitmap) data.getExtras().get("data");
+        Log.d(TAG,"Here");
+        if (mThumbnail != null)
+          mImageView.setImageBitmap(mThumbnail);
+        Log.d(TAG,"And here");
+      }else{
+        Log.d(TAG, "No image you big dummy");
+      }
+    }
+  }
+  
+  
   
   //********************************************************************** onClick() button events
   //Update onClick()
@@ -211,6 +275,13 @@ public class MainActivity extends Activity{
         Float.toString(mSensors.getPressure()) + "\t" + Double.toString(mSensors.getAzimuth());       
     Log.d(TAG,dataString);    
   }  
+  
+  //Camera onClick()
+  //********************************
+  public void showCamera(View view){
+    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+    startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);    
+  }
 
   //Save onClick()
   //************************

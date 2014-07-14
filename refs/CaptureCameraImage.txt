@@ -1,0 +1,46 @@
+Purpose: Captures camera image and displays in imageview.
+
+
+Code for AndroidManifest.xml
+==============================
+na
+
+
+
+Code to go into calling activity
+=================================
+//add at top of activity
+final int CAMERA_PIC_REQUEST = 1337;  
+
+//
+  public void showCamera(View view){
+    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+    startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);    
+  }
+
+
+Additional code
+=================================
+//add to same activity as calling method
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    
+    if(resultCode == RESULT_OK){
+      if (requestCode == 1337){
+        mThumbnail = (Bitmap) data.getExtras().get("data");
+        if (mThumbnail != null)
+          mImageView.setImageBitmap(mThumbnail);
+      }else{
+        Log.d(TAG, "No image you big dummy");
+      }
+    }
+  }
+  
+Activity XML
+============================================
+	<ImageView
+	    android:id="@+id/imageViewCamera"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/ic_launcher"
+	    />    
