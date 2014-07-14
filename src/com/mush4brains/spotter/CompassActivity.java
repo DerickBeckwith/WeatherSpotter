@@ -113,6 +113,9 @@ public class CompassActivity extends Activity implements SensorEventListener {
 			DecimalFormat df = new DecimalFormat("###.0");
 			CardinalPoints cp = new CardinalPoints();
 			
+			if (azimuth < 0)
+			  azimuth += 360.0;
+			
 			readingAzimuth.setText("Azimuth: " + df.format(azimuth) + "'" + cp.getCardinalAbbreviation(azimuth) + "'");
 			
 			readingPitch.setText("Pitch: " + Double.toString(pitch));

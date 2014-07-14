@@ -41,9 +41,13 @@ public class MySensors {
   
   private float[] valuesAccelerometer;
   private float[] valuesMagneticField;  
+  private float[] filterAccelerometer;
+  private float[] filterMagneticField;  
+  
   private float[] matrixR;
   private float[] matrixI;
   private float[] matrixValues;
+  
   private double mPitch = 0;
   private double mRoll = 0;
   private double mAzimuth = 0;
@@ -58,9 +62,13 @@ public class MySensors {
     //initialize arrays
     valuesAccelerometer = new float[3];
     valuesMagneticField = new float[3];
+    filterAccelerometer = new float[3];
+    filterMagneticField = new float[3];
+    
     matrixR = new float[9];
     matrixI = new float[9];
     matrixValues = new float[3];
+    
     
     //set context and determine if sensors exist
     this.mContext = context;  
@@ -108,10 +116,16 @@ public class MySensors {
                   break;
               }
 
+            //attempt at low pass filter
+            //http://blog.thomnichols.org/2011/08/smoothing-sensor-data-with-a-low-pass-filter 
+            filterMagneticField = lowPass ( valuesMagneticField, filterMagneticField );
+            filterAccelerometer = lowPass ( valuesAccelerometer, filterAccelerometer );
+              
             //perform matrix math
             boolean success = SensorManager.getRotationMatrix(matrixR, matrixI,
-                  valuesAccelerometer, valuesMagneticField);
-
+                filterAccelerometer, filterMagneticField);
+//            boolean success = SensorManager.getRotationMatrix(matrixR, matrixI,
+//                valuesAccelerometer, valuesMagneticField);
             //math operation successful
             if (success) {
               SensorManager.getOrientation(matrixR, matrixValues);
@@ -133,10 +147,25 @@ public class MySensors {
   }//if(compass exists
   }//constructor
   
+  
+  protected float[] lowPass( float[] input, float[] output ) {
+    final float ALPHA = 0.05f;
+    if ( output == null ) return input;
+     
+    for ( int i=0; i<input.length; i++ ) {
+        output[i] = output[i] + ALPHA * (input[i] - output[i]);
+    }
+    return output;
+  }
+  
   //getters
   public double getAzimuth(){
-    if(mCompassSensorExists)
-      return mAzimuth;
+    if(mCompassSensorExists){
+      if(mAzimuth < 0)
+        mAzimuth += 360.0;
+      
+      return mAzimuth;      
+    }
     else
       return 0;
   }

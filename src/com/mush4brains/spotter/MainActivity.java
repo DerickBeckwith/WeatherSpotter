@@ -70,7 +70,7 @@ public class MainActivity extends Activity{
   MenuItem menuDataManual;
   
   //********************************************************************** Activity Life Cycle Methods
-  //onClick()
+  //onCreate()
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -113,15 +113,6 @@ public class MainActivity extends Activity{
     mTextCompass = (TextView)findViewById(R.id.textViewCompass);
     
     mSensors = new MySensors(this.getBaseContext()); 
-    
-//    //start automatic data collection at fixed intervals
-//    try{
-//      myTask = new MyTimerTask();
-//      myTimer.schedule(myTask, 1000, 2000);
-//    }catch(Exception e){
-//      Log.d(TAG, e.getMessage());
-//    }finally{      
-//    } 
     
     updateTextViews();
 
@@ -204,7 +195,7 @@ public class MainActivity extends Activity{
           return true;
       default:
           return super.onOptionsItemSelected(item);
-      }
+      } 
     
   }  
   

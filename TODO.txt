@@ -3,10 +3,15 @@
 
 //References
 // https://developers.google.com/maps/tutorials/fundamentals/adding-a-google-map#the_basic_html_page
-//API Key:
-//AIzaSyBvFgthsenWGwnjD0RL3CBpxhp1sZ1bVAM
-//eclectic1993@gmail.com
+//API Key:?lookup
+//
+//
 //http://maps.googleapis.com/maps/api/geocode/json?latlng=32.95918,-80.15468&sensor=true
+
+
+//Android Asset Studio
+//http://romannurik.github.io/AndroidAssetStudio/index.html
+
 
  //************************************************ TODO List
  //MainActivity
@@ -21,7 +26,7 @@
  * MainActivity - Add actionbar to display subtitle
  * MainActivity - Add basic code to read shared preferences
  * MainActivity - Add basic code to save shared preferences
- * MainActivity - Set portrait orientation mode as only choice.
+ * MainActivity - Move and test sensor register/unregister to onStart and onStop
   
  //ReportActivity
  * ReportActivity - Create ReportActivity and start from MainActivity
@@ -64,5 +69,6 @@
  * CompassActivity - Display azimuth in text such as N,S,SE,E-SE,W-NW 
  * MainActivity - Add basic options.
  * MainActivity - Add basic option details to control sampling intervals.
-* HistoryActivity - Save history to an external file (SD drive) that may be imported via USB
-    
+ * HistoryActivity - Save history to an external file (SD drive) that may be imported via USB
+ * MainActivity - Set portrait orientation mode as only choice.
+     

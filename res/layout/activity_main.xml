@@ -163,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/ic_72x72_cloud_tornado_a"
+                android:drawableTop="@drawable/ic_72x72_cloud_tornado_a_72"
                 android:onClick="processTornado" />
         </GridLayout>
     </LinearLayout>
